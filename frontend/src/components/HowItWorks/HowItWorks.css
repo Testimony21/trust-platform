@@ -1,0 +1,137 @@
+/* SECTION */
+.how-it-works {
+  padding: 15px 7%;
+  position: relative;
+}
+
+/* HEADER */
+.section-header {
+  text-align: center;
+  max-width: 750px;
+  margin: auto;
+}
+
+.mini-title {
+  display: inline-block;
+  background: rgba(140, 0, 255, 0.15);
+  color: #d2b3ff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  margin-bottom: 18px;
+}
+
+.section-header h2 {
+  font-size: 2.7rem;
+  margin-bottom: 20px;
+}
+
+.section-header p {
+  color: #bdbdc7;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* STEPS */
+.steps {
+  margin-top: 60px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* CARD */
+.step-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+
+  border-radius: 22px;
+
+  padding: 35px 28px;
+
+  transition: 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(circle at top right,
+      rgba(140, 0, 255, 0.15),
+      transparent 40%);
+
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+.step-card:hover::before {
+  opacity: 1;
+}
+
+.step-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(178,108,255,0.4);
+}
+
+/* ICON */
+.icon-box {
+  width: 65px;
+  height: 65px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(135deg, #8f44ff, #5b2cff);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 24px;
+}
+
+.icon-box svg {
+  color: white;
+}
+
+.icon-box.purple {
+  background:
+    linear-gradient(135deg, #b26cff, #6b3cff);
+}
+
+/* .icon-box.blue {
+  background:
+    linear-gradient(135deg, #4f8cff, #3457ff);
+} */
+
+/* TEXT */
+.step-card h3 {
+  font-size: 1.35rem;
+  margin-bottom: 14px;
+}
+
+.step-card p {
+  color: #bdbdc7;
+  line-height: 1.7;
+  font-size: 0.97rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 950px) {
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header h2 {
+    font-size: 2.2rem;
+  }
+
+}

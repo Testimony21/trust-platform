@@ -1,0 +1,23 @@
+:root {
+  --bg: #0f0f14;
+  --card: #1a1a22;
+  --text: #ffffff;
+  --muted: #a1a1aa;
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #22c55e;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, Arial, sans-serif;
+}
