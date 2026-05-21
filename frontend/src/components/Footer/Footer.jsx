@@ -6,19 +6,21 @@ import {
   FaTwitter,
   FaLinkedinIn
 } from "react-icons/fa";
-
+import useReveal from "../../hooks/useReveal";
 import { ShieldCheck } from "lucide-react";
 
 export default function Footer() {
+  useReveal();
+
   return (
-    <footer className="footer">
+    <footer className="footer reveal">
 
       {/* TOP CTA */}
-      <div className="footer-cta">
+      <div className="footer-cta reveal">
 
-        <div className="footer-cta-text">
+        <div className="footer-cta-text reveal">
 
-          <span className="mini-title">
+          <span className="mini-title reveal">
             START VERIFYING
           </span>
 
@@ -33,14 +35,14 @@ export default function Footer() {
 
         </div>
 
-        <button className="footer-btn">
+        <button className="footer-btn reveal">
           Get Started
         </button>
 
       </div>
 
       {/* MAIN */}
-      <div className="footer-main">
+      <div className="footer-main reveal">
 
         {/* LEFT */}
         <div className="footer-brand">
@@ -78,7 +80,7 @@ export default function Footer() {
         </div>
 
         {/* RIGHT */}
-        <div className="footer-links">
+        <div className="footer-links reveal">
 
           <div>
             <h4>Platform</h4>
@@ -112,7 +114,7 @@ export default function Footer() {
       </div>
 
       {/* BOTTOM */}
-      <div className="footer-bottom">
+      <div className="footer-bottom reveal">
 
         <p>
           © 2026 TrustPlatform. All rights reserved.

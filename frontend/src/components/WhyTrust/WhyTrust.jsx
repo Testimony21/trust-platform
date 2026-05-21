@@ -6,13 +6,16 @@ import {
   Siren,
   BadgeCheck
 } from "lucide-react";
+import useReveal from "../../hooks/useReveal";
 
 export default function WhyTrust() {
+  useReveal();
   return (
-    <section className="why-trust" id="why">
+
+    <section className="why-trust reveal" id="why reveal">
 
   {/* LEFT */}
-  <div className="why-left">
+  <div className="why-left reveal">
 
     <span className="mini-title">
       WHY TRUSTPLATFORM
@@ -65,7 +68,7 @@ export default function WhyTrust() {
   </div>
 
   {/* RIGHT */}
-  <div className="why-right">
+  <div className="why-right reveal">
 
     <div className="trust-preview">
 
