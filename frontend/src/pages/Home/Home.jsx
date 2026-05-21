@@ -86,8 +86,6 @@ export default function Home() {
 
       </section>
 
-      <Navbar />
-
       <HowItWorks /> 
 
       <WhyTrust />

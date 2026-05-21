@@ -181,14 +181,51 @@ body {
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
+    padding: 60px 5%;
+    gap: 40px;
     text-align: center;
   }
 
   .hero-left h1 {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
+    line-height: 1.2;
+  }
+
+  .hero-left p {
+    font-size: 0.95rem;
+  }
+
+  .cta {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    max-width: 280px;
   }
 
   .stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .hero-right {
+    display: flex;
     justify-content: center;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .floating {
+    position: static;
+    margin-top: 15px;
+    display: inline-block;
   }
 }
