@@ -19,7 +19,7 @@ export default function Home() {
           <span className="badge">Secure Buyer–Seller Verification</span>
 
           <h1>
-            Know Who You’re <span>Dealing With</span> Before You Pay
+            Verify Sellers Before<span> You Pay</span>
           </h1>
 
           <p>
@@ -52,7 +52,7 @@ export default function Home() {
         </div>
 
         {/* RIGHT */}
-        <div className="hero-right">
+        {/* <div className="hero-right">
 
           <div className="card preview-card">
 
@@ -78,20 +78,18 @@ export default function Home() {
 
           </div>
 
-          {/* <div className="floating">
-            Verify before you trust →
-          </div> */}
 
-        </div>
+        </div> */}
 
-      </section>
+      
+      </section >
 
-      <HowItWorks /> 
+      <HowItWorks />
 
       <WhyTrust />
 
       <Footer />
 
-    </div>
+    </div >
   );
 }
