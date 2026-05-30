@@ -1,5 +1,6 @@
 import Navbar from "../../components/Navbar/Navbar";
 import "./Home.css";
+import heroLogo from "../../assets/images/hero.png";
 import HowItWorks from "../../components/HowItWorks/HowItWorks";
 import WhyTrust from "../../components/WhyTrust/WhyTrust";
 import Footer from "../../components/Footer/Footer";
@@ -19,7 +20,7 @@ export default function Home() {
           <span className="badge">Secure Buyer–Seller Verification</span>
 
           <h1>
-            Verify Sellers Before<span> You Pay</span>
+            Verify Sellers <span>Before You Pay</span>
           </h1>
 
           <p>
@@ -49,6 +50,10 @@ export default function Home() {
             </div>
           </div>
 
+        </div>
+
+        <div className="hero-logo-bg" aria-hidden="true">
+          <img src={heroLogo} alt="" />
         </div>
 
         {/* RIGHT */}
@@ -81,7 +86,7 @@ export default function Home() {
 
         </div> */}
 
-      
+
       </section >
 
       <HowItWorks />

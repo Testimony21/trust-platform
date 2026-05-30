@@ -131,15 +131,17 @@
   display: flex;
   align-items: center;
   gap: 10px;
-
-  color: #d9b8ff;
-
-  font-size: 1.25rem;
-  font-weight: 700;
+  height: 46px;          /* fixed space reserved in footer */
+  overflow: visible;
+  transform: translateX(-10px);
 }
 
-.brand-logo svg {
-  color: #b26cff;
+.brand-logo img {
+  height: 110px;          /* visual logo size */
+  width: auto;
+  display: block;
+  object-fit: contain;
+  transform: translateY(-5px);
 }
 
 .footer-brand p {

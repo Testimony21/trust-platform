@@ -1,26 +1,37 @@
 .navbar {
+  height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 7%;
+  /* padding: 0px 7%; */
   background: rgba(10, 10, 20, 0.6);
   backdrop-filter: blur(14px);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #b26cff;
-  line-height: 1;
-  transform: translateY(15px);
+ height: 100%;
+
+}
+
+.logo img {
+  padding: 0px 30%;
+  height: 105px;      /* adjust this until it fits nicely */
+  width: auto;
+  display: block;
+  object-fit: contain;
+   transform: translateY(20px); /* adjust this to vertically center the logo */
 }
 
 nav {
+  padding: 0px 7%;
+
   display: flex;
   gap: 18px;
   align-items: center;

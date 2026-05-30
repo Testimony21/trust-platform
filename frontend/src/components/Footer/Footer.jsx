@@ -7,6 +7,7 @@ import {
   FaLinkedinIn
 } from "react-icons/fa";
 import useReveal from "../../hooks/useReveal";
+import logo from "../../assets/images/bg-logo.png";  
 import { ShieldCheck } from "lucide-react";
 
 export default function Footer() {
@@ -48,8 +49,8 @@ export default function Footer() {
         <div className="footer-brand">
 
           <div className="brand-logo">
-            <ShieldCheck size={20} />
-            <span>TrustPlatform</span>
+            <img src={logo} alt="Trust-Platform Logo" />
+            {/* <span>TrustPlatform</span> */}
           </div>
 
           <p>

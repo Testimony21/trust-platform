@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
+import logo from "../../assets/images/bg-logo.png";  
 import "./Navbar.css";
 
 export default function Navbar() {
   return (
     <header className="navbar">
-      <div className="logo">Trust-Platform</div>
+      <div className="logo">
+        <img src={logo} alt="Trust-Platform Logo" />
+      </div>
 
       <nav>
         {/* <a href="#how">How it works</a>
