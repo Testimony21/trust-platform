@@ -133,7 +133,7 @@
   gap: 10px;
   height: 46px;          /* fixed space reserved in footer */
   overflow: visible;
-  transform: translateX(-10px);
+  transform: translateX(-23px);
 }
 
 .brand-logo img {

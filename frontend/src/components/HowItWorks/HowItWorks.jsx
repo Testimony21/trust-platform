@@ -3,18 +3,18 @@ import {
   Search,
   BadgeCheck
 } from "lucide-react";
-import useReveal from "../../hooks/useReveal";
+import useHowReveal from "../../hooks/useHowReveal";
 import "./HowItWorks.css";
 
 export default function HowItWorks() {
-  useReveal();
+  useHowReveal();
 
   return (
-    <section className="how-it-works reveal" id="how reveal">
+    <section className="how-it-works" id="how-it-works">
 
-      <div className="section-header reveal">
+      <div className="section-header how-reveal">
 
-        <span className="mini-title reveal">
+        <span className="mini-title">
           HOW IT WORKS
         </span>
 
@@ -30,11 +30,11 @@ export default function HowItWorks() {
 
       </div>
 
-      <div className="steps reveal">
+      <div className="steps">
 
-        <div className="step-card reveal">
+        <div className="step-card how-reveal">
 
-          <div className="icon-box reveal">
+          <div className="icon-box">
             <Search size={28} />
           </div>
 
@@ -47,9 +47,9 @@ export default function HowItWorks() {
 
         </div>
 
-        <div className="step-card reveal">
+        <div className="step-card how-reveal">
 
-          <div className="icon-box purple reveal">
+          <div className="icon-box purple how-reveal">
             <ShieldCheck size={28} />
           </div>
 
@@ -63,9 +63,9 @@ export default function HowItWorks() {
 
         </div>
 
-        <div className="step-card reveal">
+        <div className="step-card how-reveal">
 
-          <div className="icon-box purple reveal">
+          <div className="icon-box purple how-reveal">
             <BadgeCheck size={28} />
           </div>
 

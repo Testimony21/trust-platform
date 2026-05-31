@@ -1,6 +1,7 @@
 import Navbar from "../../components/Navbar/Navbar";
 import "./Home.css";
 import heroLogo from "../../assets/images/hero.png";
+import { Link } from "react-router-dom";
 import HowItWorks from "../../components/HowItWorks/HowItWorks";
 import WhyTrust from "../../components/WhyTrust/WhyTrust";
 import Footer from "../../components/Footer/Footer";
@@ -11,13 +12,11 @@ export default function Home() {
 
       <Navbar />
 
-      {/* HERO SECTION */}
       <section className="hero">
 
-        {/* LEFT */}
         <div className="hero-left">
 
-          <span className="badge">Secure Buyer–Seller Verification</span>
+          <span className="badge">Buyer–Seller Trust Check</span>
 
           <h1>
             Verify Sellers <span>Before You Pay</span>
@@ -29,11 +28,11 @@ export default function Home() {
           </p>
 
           <div className="cta">
-            <button className="primary">Start Verification</button>
-            <button className="secondary">How it works</button>
+            <Link to="/verify-seller" className="primary">Verify a Seller</Link>
+            <Link to="/register" className="secondary">Get Verified</Link>
           </div>
 
-          <div className="stats">
+          {/* <div className="stats">
             <div>
               <h3>10k+</h3>
               <span>Sellers Checked</span>
@@ -48,7 +47,7 @@ export default function Home() {
               <h3>Fast</h3>
               <span>Instant Verification</span>
             </div>
-          </div>
+          </div> */}
 
         </div>
 

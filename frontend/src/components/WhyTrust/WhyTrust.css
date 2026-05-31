@@ -1,6 +1,6 @@
 /* WHY TRUST SECTION */
 .why-trust {
-  padding: 70px 7%;
+  padding: 80px 7%;
 
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -38,6 +38,7 @@
   transition: all 0.8s ease;
   position: relative;
   z-index: 2;
+  padding-bottom: 28px;
 }
 
 .why-left.active,

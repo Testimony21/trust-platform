@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Login from "./pages/login/login";
 import Register from "./pages/register/Register";
+import VerifySeller from "./pages/VerifySeller/VerifySeller";
 import BuyerDashboard from "./pages/Dashboard/BuyerDashboard";
 import SellerDashboard from "./pages/Dashboard/SellerDashboard";
 import DashboardRouter from "./pages/Dashboard/DashboardRouter";
@@ -18,6 +19,7 @@ export default function App() {
 
         {/* Public Pages */}
         <Route path="/" element={<Home />} />
+        <Route path="/verify-seller" element={<VerifySeller />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}

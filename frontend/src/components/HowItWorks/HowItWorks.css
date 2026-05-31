@@ -1,6 +1,6 @@
 /* SECTION */
 .how-it-works {
-  padding: 25px 7%;
+  padding: 3px 7% 70px;
   position: relative;
 }
 
@@ -152,6 +152,17 @@
 }
 
 .reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.how-reveal {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.7s ease;
+}
+
+.how-reveal.active {
   opacity: 1;
   transform: translateY(0);
 }
