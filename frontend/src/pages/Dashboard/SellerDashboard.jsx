@@ -1,144 +1,209 @@
-import "./SellerDashboard.css";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  ShieldCheck,
+  Star,
+  BadgeCheck,
+  Clock,
+  AlertTriangle,
+  CheckCircle2,
+  User,
+  Settings,
+  LayoutDashboard,
+  LogOut,
+  Search,
+} from "lucide-react";
+import "./SellerDashboard.css";
 
-export default function Dashboard() {
+export default function SellerDashboard() {
   const { user, logout, loading } = useAuth();
+  const navigate = useNavigate();
 
-  // 🧠 IMPORTANT: prevent blank screen
   if (loading) {
-    return (
-      <div style={{ color: "white", padding: "20px" }}>
-        Loading dashboard...
-      </div>
-    );
+    return <div className="dash-loading">Loading dashboard...</div>;
   }
 
-  // if (user.role === "buyer") {
-  //   return <BuyerDashboard />;
-  // }
-
-  // if (user.role === "seller") {
-  //   return <SellerDashboard />;
-  // }
-
-  // 🧠 If no user, don't render broken UI
   if (!user) {
-    return (
-      <div style={{ color: "white", padding: "20px" }}>
-        Not authenticated
-      </div>
-    );
+    return <div className="dash-loading">Not authenticated</div>;
   }
+
+  const initials = user.fullName
+    ? user.fullName.split(" ").map((n) => n[0]).join("").toUpperCase()
+    : "?";
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
-    <div className="dashboard">
+    <div className="dash">
 
       {/* SIDEBAR */}
-      <aside className="sidebar">
+      <aside className="dash-sidebar">
+        <div>
+          <div className="dash-brand">
+            <ShieldCheck size={22} />
+            <span>Trust-Platform</span>
+          </div>
 
-        <h2 className="logo">Trust Platform</h2>
+          <nav className="dash-nav">
+            <Link to="/dashboard" className="dash-nav-item active">
+              <LayoutDashboard size={18} /> Overview
+            </Link>
+            <Link to="/dashboard/profile" className="dash-nav-item">
+              <User size={18} /> Profile
+            </Link>
+            <Link to="/dashboard/verification" className="dash-nav-item">
+              <BadgeCheck size={18} /> Verification
+            </Link>
+            <Link to="/dashboard/trust-score" className="dash-nav-item">
+              <Star size={18} /> Trust Score
+            </Link>
+            <Link to="/dashboard/settings" className="dash-nav-item">
+              <Settings size={18} /> Settings
+            </Link>
+          </nav>
+        </div>
 
-        <nav>
-          <p className="active">Overview</p>
-          <p>Profile</p>
-          <p>Verification</p>
-          <p>Trust Score</p>
-          <p>Settings</p>
-        </nav>
-
-        <button
-          className="logout"
-          onClick={() => {
-            logout();
-          }}
-        >
-          Logout
+        <button className="dash-logout" onClick={handleLogout}>
+          <LogOut size={16} /> Logout
         </button>
-
       </aside>
 
-      {/* MAIN CONTENT */}
-      <main className="main">
+      {/* MAIN */}
+      <main className="dash-main">
 
-        {/* TOP BAR */}
-        <div className="topbar">
-          <h1>Dashboard</h1>
+        {/* TOPBAR */}
+        <div className="dash-topbar">
+          <div>
+            <h1>Overview</h1>
+            <p className="dash-date">
+              {new Date().toLocaleDateString("en-GB", {
+                weekday: "long", day: "numeric",
+                month: "long", year: "numeric"
+              })}
+            </p>
+          </div>
 
-          <div className="user">
-            <div className="avatar">
-              {user.username?.charAt(0).toUpperCase()}
-            </div>
-
+          <div className="dash-user">
+            <div className="dash-avatar">{initials}</div>
             <div>
-              <p className="name">{user.username}</p>
-              <span className="role">{user.role}</span>
+              <p className="dash-name">{user.fullName || "Seller"}</p>
+              <span className="dash-role">Seller account</span>
             </div>
           </div>
         </div>
 
-        {/* CARDS */}
-        <div className="cards">
+        {/* ALERT — new account */}
+        <div className="dash-alert">
+          <AlertTriangle size={17} />
+          <span>Your trust score starts at 0. Complete your profile and get buyer reviews to grow it.</span>
+        </div>
 
-          <div className="card">
-            <h3>Trust Score</h3>
-            <p className="big">72%</p>
-            <span>Based on verification data</span>
+        {/* STAT CARDS */}
+        <div className="dash-cards">
+          <div className="dash-card">
+            <div className="dash-card-top">
+              <span className="dash-card-label">Trust Score</span>
+              <div className="dash-card-icon purple">
+                <Star size={18} />
+              </div>
+            </div>
+            <p className="dash-card-value">0%</p>
+            <span className="dash-card-sub">No reviews yet</span>
+            <div className="dash-score-bar">
+              <div className="dash-score-fill" style={{ width: "0%" }} />
+            </div>
           </div>
 
-          <div className="card">
-            <h3>Status</h3>
-            <p className="big">Active</p>
-            <span>Account is verified</span>
+          <div className="dash-card">
+            <div className="dash-card-top">
+              <span className="dash-card-label">Verification</span>
+              <div className="dash-card-icon orange">
+                <BadgeCheck size={18} />
+              </div>
+            </div>
+            <p className="dash-card-value">Pending</p>
+            <span className="dash-card-sub">Identity not verified yet</span>
           </div>
 
-          <div className="card">
-            <h3>Role</h3>
-            <p className="big">{user.role}</p>
-            <span>User type on platform</span>
+          <div className="dash-card">
+            <div className="dash-card-top">
+              <span className="dash-card-label">Total Deals</span>
+              <div className="dash-card-icon green">
+                <CheckCircle2 size={18} />
+              </div>
+            </div>
+            <p className="dash-card-value">0</p>
+            <span className="dash-card-sub">No completed deals yet</span>
+          </div>
+        </div>
+
+        {/* BOTTOM GRID */}
+        <div className="dash-bottom">
+
+          {/* ACTIVITY */}
+          <div className="dash-section">
+            <h2>Account activity</h2>
+            <div className="dash-activity">
+              <div className="dash-activity-item">
+                <CheckCircle2 size={16} className="icon-green" />
+                <span>Account created successfully</span>
+                <span className="dash-activity-time">Just now</span>
+              </div>
+              <div className="dash-activity-item">
+                <Clock size={16} className="icon-orange" />
+                <span>Profile setup incomplete</span>
+                <span className="dash-activity-time">Pending</span>
+              </div>
+              <div className="dash-activity-item">
+                <Clock size={16} className="icon-orange" />
+                <span>Identity verification pending</span>
+                <span className="dash-activity-time">Pending</span>
+              </div>
+            </div>
+          </div>
+
+          {/* NEXT STEPS */}
+          <div className="dash-section">
+            <h2>Get started</h2>
+            <div className="dash-steps">
+              <div className="dash-step">
+                <div className="dash-step-num">1</div>
+                <div>
+                  <strong>Complete your profile</strong>
+                  <p>Add your bio, photo, and social links.</p>
+                  <Link to="/dashboard/profile" className="dash-step-link">
+                    Go to Profile →
+                  </Link>
+                </div>
+              </div>
+              <div className="dash-step">
+                <div className="dash-step-num">2</div>
+                <div>
+                  <strong>Verify your identity</strong>
+                  <p>Submit ID to unlock full seller features.</p>
+                  <Link to="/dashboard/verification" className="dash-step-link">
+                    Start Verification →
+                  </Link>
+                </div>
+              </div>
+              <div className="dash-step">
+                <div className="dash-step-num">3</div>
+                <div>
+                  <strong>Get your first review</strong>
+                  <p>Share your profile link with buyers to start building trust.</p>
+                  <Link to="/dashboard/trust-score" className="dash-step-link">
+                    Learn More →
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
-
-        {/* ACTIVITY SECTION */}
-        <div className="section">
-
-          <h2>Recent Activity</h2>
-
-          <div className="activity">
-
-            <div className="item">
-              ✔ Account created successfully
-            </div>
-
-            <div className="item">
-              ✔ Email verified
-            </div>
-
-            <div className="item warning">
-              ⚠ ID verification pending
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* ACTIONS */}
-        <div className="section">
-
-          <h2>Quick Actions</h2>
-
-          <div className="actions">
-
-            <button>Update Profile</button>
-            <button>Improve Trust Score</button>
-            <button>Verify Identity</button>
-
-          </div>
-
-        </div>
-
       </main>
-
     </div>
   );
 }

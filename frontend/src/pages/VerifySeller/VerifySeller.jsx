@@ -6,6 +6,7 @@ import {
   Lock,
   Search,
   ShieldCheck,
+  ChevronLeft
 } from "lucide-react";
 import "./VerifySeller.css";
 
@@ -18,6 +19,7 @@ export default function VerifySeller() {
 
       <section className="verify-shell">
         <Link to="/" className="verify-back">
+          <ChevronLeft size={20} />
           Back to home
         </Link>
 

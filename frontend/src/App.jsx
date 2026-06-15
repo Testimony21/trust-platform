@@ -13,7 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoutes";
 
 function Layout() {
   const location = useLocation();
-  const hideNavbar = ["/login", "/register"].includes(location.pathname);
+  const hideNavbar = ["/login", "/register", "/dashboard"].includes(location.pathname);
 
   return (
     <>
