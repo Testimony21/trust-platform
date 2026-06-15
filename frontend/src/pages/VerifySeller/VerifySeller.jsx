@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   ArrowRight,
   CheckCircle2,
@@ -7,13 +7,14 @@ import {
   Search,
   ShieldCheck,
 } from "lucide-react";
-import Navbar from "../../components/Navbar/Navbar";
 import "./VerifySeller.css";
 
 export default function VerifySeller() {
+  const [searchParams] = useSearchParams();
+  const prefill = searchParams.get("q") || "";
+
   return (
     <main className="verify-page">
-      <Navbar />
 
       <section className="verify-shell">
         <Link to="/" className="verify-back">

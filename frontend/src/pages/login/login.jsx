@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { ArrowRight, LockKeyhole, Mail, Sparkles, ChevronLeft } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-
-import {
-  FaGoogle,
-  FaApple
-} from "react-icons/fa";
-
 import "./login.css";
 
 export default function Login() {
@@ -15,26 +10,18 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       setLoading(true);
       setError("");
-
       await login(email, password);
-
       navigate("/dashboard");
-
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        "Login failed"
-      );
+      setError(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -43,94 +30,103 @@ export default function Login() {
   return (
     <div className="login-page">
 
-      <div className="login-box">
+      <Link to="/" className="back-home">
+        <ChevronLeft size={16} /> Back to home
+      </Link>
 
-        <span className="login-badge">
-          TrustPlatform
-        </span>
+      {/* LEFT */}
+      <div className="login-left">
+        <div className="login-left-inner">
+          <p className="login-left-title">Why Trust-Platform?</p>
 
-        <h1>
-          Welcome back
-        </h1>
-
-        <p className="login-text">
-          Login to continue verifying sellers.
-        </p>
-
-        {error && (
-          <div className="login-error">
-            {error}
+          <div className="login-feature">
+            <div className="login-feature-icon">✦</div>
+            <div>
+              <strong>Instant seller verification</strong>
+              <p>Check identity, trust scores, and scam reports in seconds.</p>
+            </div>
           </div>
-        )}
 
-        {/* SOCIALS */}
-        <div className="social-row">
+          <div className="login-feature">
+            <div className="login-feature-icon">🛡</div>
+            <div>
+              <strong>Scam protection</strong>
+              <p>We flag risky sellers before you send a single naira.</p>
+            </div>
+          </div>
 
-          <button className="social-btn">
-            <FaGoogle />
-          </button>
+          <div className="login-feature">
+            <div className="login-feature-icon">📋</div>
+            <div>
+              <strong>Full transaction history</strong>
+              <p>Review all your past checks from your dashboard.</p>
+            </div>
+          </div>
 
-          <button className="social-btn">
-            <FaApple />
-          </button>
+          <div className="login-trust-note">
+            🔒 Your data is encrypted and never sold.
+          </div>
+        </div>
+      </div>
+
+      {/* RIGHT */}
+      <div className="login-right">
+        <div className="login-card">
+
+          <div className="login-badge">
+            <Sparkles size={14} /> Secure sign in
+          </div>
+
+          <h2>Welcome back</h2>
+          <p className="login-sub">Login to continue verifying sellers with confidence.</p>
+
+          {error && <div className="login-error">{error}</div>}
+
+          <form onSubmit={handleSubmit} className="login-form">
+
+            <div className="login-field-wrap">
+              <label>Email address</label>
+              <div className="login-field">
+                <Mail size={17} />
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="login-field-wrap">
+              <div className="login-label-row">
+                <label>Password</label>
+                <Link to="/forgot-password">Forgot password?</Link>
+              </div>
+              <div className="login-field">
+                <LockKeyhole size={17} />
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <button className="login-btn" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+              <ArrowRight size={18} />
+            </button>
+
+          </form>
+
+          <p className="login-signup">
+            New to Trust Platform? <Link to="/register">Create account</Link>
+          </p>
 
         </div>
-
-        <div className="divider">
-          <span>or</span>
-        </div>
-
-        {/* FORM */}
-        <form
-          onSubmit={handleSubmit}
-          className="login-form"
-        >
-
-          <input
-            type="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
-            required
-          />
-
-          <button
-            className="login-btn"
-            disabled={loading}
-          >
-            {loading
-              ? "Logging in..."
-              : "Login"}
-          </button>
-
-        </form>
-
-        <div className="bottom-links">
-
-          <Link to="/">
-            Forgot password?
-          </Link>
-
-          <span>•</span>
-
-          <Link to="/register">
-            Create account
-          </Link>
-
-        </div>
-
       </div>
 
     </div>

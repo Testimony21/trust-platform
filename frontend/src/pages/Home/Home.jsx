@@ -1,16 +1,27 @@
-import Navbar from "../../components/Navbar/Navbar";
 import "./Home.css";
 import heroLogo from "../../assets/images/hero.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HowItWorks from "../../components/HowItWorks/HowItWorks";
 import WhyTrust from "../../components/WhyTrust/WhyTrust";
 import Footer from "../../components/Footer/Footer";
+import { useState } from "react";
 
 export default function Home() {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (query.trim()) {
+      navigate(`/verify-seller?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSearch();
+    };
+
   return (
     <div className="home">
-
-      <Navbar />
 
       <section className="hero">
 
@@ -27,9 +38,18 @@ export default function Home() {
             and confirm identities before making any transaction online.
           </p>
 
+          {/* SEARCH BAR */}
+          <div className="hero-search">
+            <input
+              type="text"
+              placeholder="Enter seller username, email or phone..."
+            />
+            <Link to="/verify-seller" className="primary">Verify</Link>
+          </div>
+
+          {/* Keep secondary CTA below */}
           <div className="cta">
-            <Link to="/verify-seller" className="primary">Verify a Seller</Link>
-            <Link to="/register" className="secondary">Get Verified</Link>
+            <Link to="/get-verified" className="secondary">Get Verified as a Seller</Link>
           </div>
 
           {/* <div className="stats">
