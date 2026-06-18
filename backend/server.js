@@ -8,7 +8,7 @@ const userRoutes = require("./routes/userRoutes");
 const buyerRoutes = require("./routes/buyerRoutes");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-const mongoSanitize = require("express-mongo-sanitize");
+// const mongoSanitize = require("express-mongo-sanitize");
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(helmet());
-app.use(mongoSanitize());
+// app.use(mongoSanitize());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,

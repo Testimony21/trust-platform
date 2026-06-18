@@ -8,8 +8,10 @@ const {
 
 const protect = require("../middleware/authMiddleware");
 
+// Create seller profile
 router.post("/create", protect, createSellerProfile);
 
+// Get seller profile
 router.get("/:userId", getSellerProfile);
 
 module.exports = router;

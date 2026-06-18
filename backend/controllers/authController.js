@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 // REGISTER
 exports.register = async (req, res) => {
   try {
-    const { username, email, password, role } = req.body;
+    const { fullName, email, password, phone, role } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -20,9 +20,10 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      username,
+      fullName,
       email,
       password: hashedPassword,
+      phone,
       role
     });
 
@@ -32,6 +33,14 @@ exports.register = async (req, res) => {
         userId: user._id
       });
     }
+
+    if (user.role === "seller") {
+  await SellerProfile.create({
+    userId: user._id,
+    displayName: user.fullName,
+    phone: user.phone,
+  });
+}
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
@@ -44,8 +53,9 @@ exports.register = async (req, res) => {
       token,
       user: {
         id: user._id,
-        username: user.username,
+        fullName: user.fullName,
         email: user.email,
+        phone: user.phone,
         role: user.role
       }
     });

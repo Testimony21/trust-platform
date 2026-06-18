@@ -31,7 +31,7 @@ const sellerProfileSchema = new mongoose.Schema({
 
   trustScore: {
     type: Number,
-    default: 50
+    default: 0
   },
 
   isVerified: {
