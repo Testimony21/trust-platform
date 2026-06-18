@@ -29,7 +29,7 @@ export default function BuyerDashboard() {
   const fetchBuyerDashboard = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/buyer/dashboard",
+        `${import.meta.env.VITE_API_URL}/api/buyer/dashboard`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -53,7 +53,7 @@ export default function BuyerDashboard() {
       setResult(null);
 
       const res = await axios.post(
-        "http://localhost:5000/api/buyer/verify",
+        `${import.meta.env.VITE_API_URL}/api/buyer/verify`,
         { query },
         {
           headers: {
@@ -78,7 +78,7 @@ export default function BuyerDashboard() {
   const handleSave = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/buyer/save",
+        `${import.meta.env.VITE_API_URL}/api/buyer/save`,
         { sellerId: result._id },
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -95,7 +95,7 @@ export default function BuyerDashboard() {
   const handleReport = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/buyer/report",
+        `${import.meta.env.VITE_API_URL}/api/buyer/report`,
         { sellerId: result._id },
         {
           headers: { Authorization: `Bearer ${token}` }

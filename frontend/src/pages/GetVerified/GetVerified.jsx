@@ -35,7 +35,7 @@ export default function GetVerified() {
 
         try {
             await axios.post(
-                "http://localhost:5000/api/seller/create",
+                `${import.meta.env.VITE_API_URL}/api/seller/create`,
                 formData,
                 {
                     headers: {
