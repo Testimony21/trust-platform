@@ -1,273 +1,209 @@
-/* BuyerDashboard.css */
+@import "./SellerDashboard.css"; /* reuse all .dash, .dash-card, .dash-sidebar etc */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Inter, Arial, sans-serif;
-  background: #0a0a12;
-}
-
-/* PAGE */
-.dashboard {
-  display: flex;
-  min-height: 100vh;
-  background: linear-gradient(180deg, #0b0b12, #12121c);
-  color: white;
-}
-
-/* SIDEBAR */
-.sidebar {
-  width: 260px;
+.buyer-search-card {
   background: rgba(255, 255, 255, 0.03);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 28px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.buyer-search-heading {
   display: flex;
-  flex-direction: column;
-}
-
-.logo {
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: #b26cff;
-  margin-bottom: 35px;
-}
-
-.sidebar nav {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sidebar nav p {
-  padding: 14px 14px;
-  border-radius: 12px;
-  color: #a5a5b8;
-  cursor: pointer;
-  transition: 0.25s ease;
-  font-size: 0.95rem;
-}
-
-.sidebar nav p:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: white;
-}
-
-.sidebar nav .active {
-  background: linear-gradient(135deg, #8f44ff, #5b2cff);
-  color: white;
-}
-
-.logout {
-  margin-top: auto;
-  padding: 13px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: transparent;
-  color: white;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
-
-.logout:hover {
-  background: rgba(255,255,255,0.04);
-}
-
-/* MAIN */
-.main {
-  flex: 1;
-  padding: 30px;
-}
-
-/* TOPBAR */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
-
-.topbar h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.user {
-  display: flex;
-  align-items: center;
   gap: 12px;
-  background: rgba(255,255,255,0.03);
-  padding: 10px 14px;
-  border-radius: 14px;
-}
-
-.avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #8f44ff, #5b2cff);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 700;
-}
-
-.name {
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.role {
-  font-size: 0.78rem;
-  color: #9ca3af;
-}
-
-/* CARDS */
-.cards {
-  margin-top: 28px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.card {
-  background: rgba(255,255,255,0.035);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 18px;
-  padding: 22px;
-  transition: 0.25s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(178,108,255,0.45);
-}
-
-.card h3 {
-  font-size: 0.95rem;
-  color: #c6c6d2;
-  margin-bottom: 12px;
-}
-
-.big {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #b26cff;
-  margin-bottom: 8px;
-}
-
-.card span {
-  color: #8f90a6;
-  font-size: 0.88rem;
-}
-
-/* SECTION */
-.section {
-  margin-top: 28px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 18px;
-  padding: 22px;
-}
-
-.section h2 {
-  font-size: 1.1rem;
+  align-items: flex-start;
   margin-bottom: 18px;
 }
 
-/* SEARCH */
-.search-box {
+.buyer-search-heading svg {
+  color: #b26cff;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.buyer-search-heading h2 {
+  font-size: 1.05rem;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.buyer-search-heading p {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.buyer-search-bar {
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid #2a2a35;
+  border-radius: 10px;
+  padding: 0 14px;
+  height: 52px;
+  transition: border-color 0.2s;
 }
 
-.search-box input {
+.buyer-search-bar:focus-within {
+  border-color: #8f44ff;
+}
+
+.buyer-search-bar svg {
+  color: #555;
+  flex-shrink: 0;
+}
+
+.buyer-search-bar input {
   flex: 1;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.06);
-  background: #151520;
-  color: white;
+  height: 100%;
+  border: none;
   outline: none;
-  /* height: 48px; */
+  background: transparent;
+  color: #fff;
+  font-size: 0.9rem;
 }
 
-.search-box input::placeholder {
-  color: #7d7d92;
+.buyer-search-bar input::placeholder {
+  color: #555;
 }
 
-.search-box button {
-  flex: none;           /* prevents stretching */
-  padding: 12px 16px;   /* reduce size */
-  width: auto;          /* shrink to content */
-  white-space: nowrap;
-  height: 43px;
-  margin-top: 0;    
-       /* match input height */
+.buyer-search-bar button {
+  height: 38px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
-/* ACTIVITY */
-.activity {
+.buyer-search-bar button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buyer-search-error {
+  margin-top: 12px;
+  color: #f87171;
+  font-size: 0.85rem;
+}
+
+/* RESULT CARD */
+.buyer-result-card {
+  background: rgba(140, 0, 255, 0.06);
+  border: 1px solid rgba(178, 108, 255, 0.2);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+
+.buyer-result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.buyer-result-top h3 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.tag-verified {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.tag-unverified {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.buyer-result-score {
+  text-align: right;
+}
+
+.buyer-result-score span {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #b26cff;
+}
+
+.buyer-result-score small {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.buyer-result-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.buyer-result-details div {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
-.item {
-  padding: 14px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.03);
-  color: #d3d3de;
+.buyer-result-details span {
+  font-size: 0.75rem;
+  color: #777;
 }
 
-.warning {
-  color: #f6c453;
+.buyer-result-details strong {
+  font-size: 0.88rem;
+  color: #eee;
 }
 
-/* LOADING */
-.loading {
-  color: white;
-  padding: 40px;
-  font-size: 1.2rem;
+.buyer-result-actions {
+  display: flex;
+  gap: 10px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-  .cards {
-    grid-template-columns: 1fr;
-  }
+.btn-outline,
+.btn-danger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
 
-@media (max-width: 850px) {
-  .dashboard {
-    flex-direction: column;
-  }
+.btn-outline {
+  background: transparent;
+  border: 1px solid #444;
+  color: #fff;
+}
 
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
+.btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
 
-  .sidebar nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
+.btn-outline:hover,
+.btn-danger:hover {
+  opacity: 0.8;
+}
 
-  .main {
-    padding: 20px;
-  }
-
-  .topbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .search-box {
-    flex-direction: column;
-  }
+.dash-bottom.single {
+  grid-template-columns: 1fr;
 }
