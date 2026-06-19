@@ -1,5 +1,6 @@
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import logo from "../../assets/images/bg-logo.png";
 import {
   ShieldCheck,
   Star,
@@ -42,10 +43,9 @@ export default function SellerDashboard() {
       {/* SIDEBAR */}
       <aside className="dash-sidebar">
         <div>
-          <div className="dash-brand">
-            <ShieldCheck size={22} />
-            <span>Trust-Platform</span>
-          </div>
+          <Link to="/" className="dash-logo" aria-label="Trust Platform home">
+            <img src={logo} alt="Trust-Platform Logo" />
+          </Link>
 
           <nav className="dash-nav">
             <Link to="/dashboard" className="dash-nav-item active">

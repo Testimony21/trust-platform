@@ -1,3 +1,24 @@
+.dash-logo {
+  display: flex;
+  align-items: center;
+  height: 68px;
+  text-decoration: none;
+  margin-bottom: 36px;
+  padding: 0 17px;
+  overflow: hidden;
+}
+
+.dash-logo img {
+  height: 100px;      /* adjust this until it fits nicely */
+  width: auto;
+  object-fit: contain;
+   transform: translateY(-8px); /* adjust this to vertically center the logo */
+}
+
+
+
+
+
 .dash {
   display: flex;
   min-height: 100vh;
