@@ -107,8 +107,9 @@ exports.login = async (req, res) => {
       token,
       user: {
         id: user._id,
-        username: user.username,
+        fullName: user.fullName,
         email: user.email,
+        phone: user.phone,
         role: user.role
       }
     });
@@ -117,5 +118,14 @@ exports.login = async (req, res) => {
     res.status(500).json({
       message: err.message
     });
+  }
+};
+
+// GET CURRENT USER
+exports.getMe = async (req, res) => {
+  try {
+    res.json(req.user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
