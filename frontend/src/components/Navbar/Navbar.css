@@ -22,11 +22,11 @@
 
 .logo img {
   padding: 0px 35%;
-  height: 105px;      /* adjust this until it fits nicely */
+  height: 95px;      /* adjust this until it fits nicely */
   width: auto;
   display: block;
   object-fit: contain;
-   transform: translateY(20px); /* adjust this to vertically center the logo */
+   /* transform: translateY(20px);  */
 }
 
 nav {
@@ -55,4 +55,26 @@ nav a {
 .solid {
   background: linear-gradient(135deg, #8f44ff, #5b2cff);
   color: white !important;
+}
+
+
+/* MOBILE */
+@media (max-width: 560px) {
+  .navbar {
+    height: 60px;
+    padding: 0 14px;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  nav {
+    gap: 6px;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
 }

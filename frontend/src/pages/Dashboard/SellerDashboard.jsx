@@ -1,6 +1,7 @@
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../../assets/images/bg-logo.png";
+import DashboardLoader from "../../components/DashboardLoader/DashboardLoader";
 import {
   ShieldCheck,
   Star,
@@ -17,11 +18,11 @@ import {
 import "./SellerDashboard.css";
 
 export default function SellerDashboard() {
-  const { user, logout, loading } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  if (loading) {
-    return <div className="dash-loading">Loading dashboard...</div>;
+  if (authLoading) {
+    return <DashboardLoader />;
   }
 
   if (!user) {

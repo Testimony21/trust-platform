@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
+import DashboardLoader from "../../components/DashboardLoader/DashboardLoader";
 import logo from "../../assets/images/bg-logo.png";
 import {
   Search,
@@ -20,6 +21,7 @@ import "./BuyerDashboard.css";
 export default function BuyerDashboard() {
   const { user, token, logout, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [stats, setStats] = useState({
     checksMade: 0,
@@ -29,13 +31,20 @@ export default function BuyerDashboard() {
   });
   const [loading, setLoading] = useState(true);
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(location.state?.prefillQuery || "");
   const [result, setResult] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     fetchBuyerDashboard();
+
+    // If we arrived from /verify-seller with a prefilled query, run it automatically
+    if (location.state?.prefillQuery) {
+      handleSearch(location.state.prefillQuery);
+      // Clear the state so a refresh doesn't re-trigger the search
+      navigate(location.pathname, { replace: true, state: {} });
+    }
   }, []);
 
   const fetchBuyerDashboard = async () => {
@@ -52,8 +61,10 @@ export default function BuyerDashboard() {
     }
   };
 
-  const handleSearch = async () => {
-    if (!query.trim()) return;
+  const handleSearch = async (overrideQuery) => {
+    const searchValue = (overrideQuery ?? query).trim();
+    if (!searchValue) return;
+
     try {
       setSearchLoading(true);
       setError("");
@@ -61,7 +72,7 @@ export default function BuyerDashboard() {
 
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/buyer/verify`,
-        { query },
+        { query: searchValue },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -110,7 +121,7 @@ export default function BuyerDashboard() {
   };
 
   if (authLoading || loading) {
-    return <div className="dash-loading">Loading dashboard...</div>;
+    return <DashboardLoader />;
   }
 
   if (!user) {
@@ -198,7 +209,7 @@ export default function BuyerDashboard() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
             />
-            <button onClick={handleSearch} disabled={searchLoading}>
+            <button onClick={() => handleSearch()} disabled={searchLoading}>
               {searchLoading ? "Checking..." : "Check Trust"}
             </button>
           </div>

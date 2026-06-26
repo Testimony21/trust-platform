@@ -10,27 +10,21 @@ body {
   min-height: 100vh;
   overflow: unset;
   background:
-    radial-gradient(
-      circle at top right,
+    radial-gradient(circle at top right,
       rgba(90, 0, 180, 0.18),
-      transparent 38%
-    ),
+      transparent 38%),
 
-    radial-gradient(
-      circle at bottom left,
+    radial-gradient(circle at bottom left,
       rgba(55, 0, 120, 0.14),
-      transparent 40%
-    ),
+      transparent 40%),
 
-    linear-gradient(
-      135deg,
+    linear-gradient(135deg,
       #05050a,
       #0c0718 45%,
-      #140624
-    );
+      #140624);
 
   position: relative;
-  
+
 }
 
 
@@ -41,15 +35,11 @@ body {
   inset: 0;
 
   background-image:
-    linear-gradient(
-      rgba(255,255,255,0.03) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,0.03) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px),
+    linear-gradient(90deg,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px);
 
   background-size: 60px 60px;
 
@@ -102,7 +92,9 @@ body {
 }
 
 @keyframes logoBreath {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.10;
   }
@@ -231,7 +223,7 @@ body {
 
 .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .primary,
@@ -279,131 +271,108 @@ body {
 
 /* MOBILE */
 @media (max-width: 900px) {
-
-  .hero-search-card {
-    padding: 30px;
-  }
-
-  .hero-search-card h2 {
-    font-size: 2rem;
-  }
-
-  .hero-search {
-    flex-direction: column;
-  }
-
-}
-
-
-/* MOBILE */
-@media (max-width: 900px) {
-
-  .verify-search {
-    flex-direction: column;
-  }
-
-  .verify-search button {
-    height: 54px;
-  }
-
-  .verify-details {
-    grid-template-columns: 1fr;
-  }
-
-}
-
-
-/* MOBILE */
-@media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
-    padding: 60px 20px;
-    gap: 30px;
-    text-align: center;
+    padding: 50px 24px 40px;
+    gap: 0;
   }
 
-  /* TYPOGRAPHY */
   .hero-left h1 {
-    font-size: 2.2rem;
-    line-height: 1.2;
-    word-wrap: break-word;
+    font-size: 2rem;
+    line-height: 1.25;
+    margin-top: 16px;
   }
 
   .hero-left p {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     line-height: 1.6;
-    padding: 0 5px;
+    margin-top: 14px;
   }
 
-  /* BADGE */
   .badge {
-    display: inline-block;
-    font-size: 0.75rem;
-    padding: 6px 12px;
+    font-size: 0.72rem;
+    padding: 5px 11px;
   }
 
-  /* CTA BUTTONS */
+  /* SEARCH BAR */
+  .hero-search {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 22px;
+    gap: 10px;
+  }
+
+  .hero-search input {
+    width: 100%;
+    height: 48px;
+  }
+
+  .hero-search .primary {
+    width: 100%;
+    height: 48px;
+  }
+
+  /* CTA */
   .cta {
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    margin-top: 20px;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 14px;
+    width: 100%;
   }
 
   .primary,
   .secondary {
     width: 100%;
-    max-width: 320px;
+    max-width: 100%;
     text-align: center;
   }
 
   /* STATS */
   .stats {
     flex-direction: column;
-    gap: 15px;
-    margin-top: 30px;
+    gap: 12px;
+    margin-top: 24px;
   }
 
   .stats div {
-    padding: 10px 0;
+    padding: 8px 0;
   }
 
   .stats h3 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 
-  /* RIGHT CARD */
   .hero-right {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
   }
 
   .card {
     width: 100%;
-    max-width: 340px;
-    padding: 20px;
+    max-width: 100%;
+    padding: 18px;
     box-sizing: border-box;
   }
 
-  .profile {
-    justify-content: center;
-    text-align: left;
-  }
-
-  .tags {
-    align-items: center;
-  }
-
-  .floating {
-    position: relative;
-    bottom: auto;
-    right: auto;
-    margin-top: 15px;
-    text-align: center;
-  }
-
-   .hero-logo-bg {
+  .hero-logo-bg {
     display: none;
+  }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 420px) {
+  .hero {
+    padding: 40px 18px 32px;
+  }
+
+  .hero-left h1 {
+    font-size: 1.7rem;
+  }
+
+  .hero-left p {
+    font-size: 0.88rem;
   }
 }

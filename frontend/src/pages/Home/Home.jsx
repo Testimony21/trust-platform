@@ -18,7 +18,7 @@ export default function Home() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") handleSearch();
-    };
+  };
 
   return (
     <div className="home">
@@ -30,7 +30,8 @@ export default function Home() {
           <span className="badge">Buyer–Seller Trust Check</span>
 
           <h1>
-            Verify Sellers <span>Before You Pay</span>
+            Verify Sellers <br />
+            <span>Before You Pay</span>
           </h1>
 
           <p>
@@ -43,8 +44,13 @@ export default function Home() {
             <input
               type="text"
               placeholder="Enter seller username, email or phone..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
-            <Link to="/verify-seller" className="primary">Verify</Link>
+            <button onClick={handleSearch} className="primary">
+              Verify
+            </button>
           </div>
 
           {/* Keep secondary CTA below */}

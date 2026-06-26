@@ -2,6 +2,7 @@ import { useAuth } from "../../context/AuthContext";
 import BuyerDashboard from "./BuyerDashboard";
 import SellerDashboard from "./SellerDashboard";
 import { useNavigate } from "react-router-dom";
+import DashboardLoader from "../../components/DashboardLoader/DashboardLoader";
 import { useEffect } from "react";
 
 export default function DashboardRouter() {
@@ -14,7 +15,7 @@ export default function DashboardRouter() {
     }
   }, [user, loading]);
 
-  if (loading) return <p style={{ color: "white", padding: "40px" }}>Loading...</p>;
+  if (loading) return <DashboardLoader />;
   if (!user) return null;
 
   if (user.role === "buyer") return <BuyerDashboard />;
