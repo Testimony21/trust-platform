@@ -3,13 +3,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* padding: 0px 7%; */
   background: rgba(10, 10, 20, 0.6);
   backdrop-filter: blur(14px);
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -58,15 +60,16 @@ nav a {
 }
 
 
-/* MOBILE */
 @media (max-width: 560px) {
   .navbar {
     height: 60px;
-    padding: 0 14px;
+    padding: 0 24px;
   }
 
   .logo img {
     height: 50px;
+    padding: 0;
+    margin-left: 0;
   }
 
   nav {
