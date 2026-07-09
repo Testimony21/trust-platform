@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ArrowRight, LockKeyhole, Mail, Sparkles, ChevronLeft } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 import "./login.css";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -18,10 +19,26 @@ export default function Login() {
     try {
       setLoading(true);
       setError("");
+
       await login(email, password);
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      setError("");
+
+      await loginWithGoogle(credentialResponse.credential);
+
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.message || "Google login failed");
     } finally {
       setLoading(false);
     }
@@ -81,6 +98,23 @@ export default function Login() {
           <p className="login-sub">Login to continue verifying sellers with confidence.</p>
 
           {error && <div className="login-error">{error}</div>}
+
+          <div className="google-auth">
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => setError("Google login failed")}
+              theme="filled_black"
+              size="large"
+              text="signin_with"
+              width="100%"
+            />
+          </div>
+
+          <div className="auth-divider">
+            <span></span>
+            <p>or continue with email</p>
+            <span></span>
+          </div>
 
           <form onSubmit={handleSubmit} className="login-form">
 

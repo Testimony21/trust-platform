@@ -336,10 +336,23 @@
   .why-trust {
     grid-template-columns: 1fr;
     gap: 50px;
+    text-align: center;
   }
 
   .why-left h2 {
     font-size: 2.5rem;
+  }
+
+  .main-text {
+    margin: 0 auto;
+  }
+
+  .mini-title {
+    margin: 0 auto;
+  }
+
+  .feature-list {
+    text-align: left;
   }
 
 }
@@ -347,15 +360,28 @@
 @media (max-width: 600px) {
 
   .why-trust {
-    padding: 90px 6%;
+    padding: 40px 6%;
   }
 
   .why-left h2 {
     font-size: 2rem;
   }
 
+  .main-text {
+    font-size: 0.93rem;
+  }
+
   .feature-item {
     padding: 18px;
+    gap: 14px;
+  }
+
+  .feature-item h3 {
+    font-size: 1rem;
+  }
+
+  .feature-item p {
+    font-size: 0.88rem;
   }
 
   .trust-preview {
@@ -369,6 +395,10 @@
 
   .inner-score h1 {
     font-size: 3.2rem;
+  }
+
+  .preview-details div {
+    padding: 14px;
   }
 
 }

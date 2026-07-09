@@ -38,3 +38,53 @@ exports.getSellerProfile = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// SEARCH SELLER
+exports.searchSeller = async (req, res) => {
+  try {
+    const { query } = req.body;
+
+    if (!query || !query.trim()) {
+      return res.status(400).json({ message: "Search query is required" });
+    }
+
+    const searchTerm = query.trim();
+
+    // Search users with role "seller" by name, email, or phone
+    const matchedUsers = await User.find({
+      role: "seller",
+      $or: [
+        { fullName: { $regex: searchTerm, $options: "i" } },
+        { email: { $regex: searchTerm, $options: "i" } },
+        { phone: { $regex: searchTerm, $options: "i" } },
+      ],
+    }).select("-password");
+
+    if (matchedUsers.length === 0) {
+      return res.status(404).json({ message: "No seller found matching that information" });
+    }
+
+    // Attach seller profile data for each match
+    const results = await Promise.all(
+      matchedUsers.map(async (user) => {
+        const profile = await SellerProfile.findOne({ userId: user._id });
+        return {
+          _id: user._id,
+          fullName: user.fullName,
+          email: user.email,
+          phone: user.phone,
+          trustScore: profile?.trustScore ?? 0,
+          isVerified: profile?.isVerified ?? false,
+          totalDeals: profile?.totalDeals ?? 0,
+          successfulDeals: profile?.successfulDeals ?? 0,
+          displayName: profile?.displayName ?? user.fullName,
+        };
+      })
+    );
+
+    res.json({ results });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

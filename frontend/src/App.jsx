@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import Home from "./pages/Home/Home";
 import Login from "./pages/login/login";
@@ -9,7 +10,9 @@ import SellerDashboard from "./pages/Dashboard/SellerDashboard";
 import DashboardRouter from "./pages/Dashboard/DashboardRouter";
 import GetVerified from "./pages/GetVerified/GetVerified";
 import Navbar from "./components/Navbar/Navbar";
-import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoutes";
+// import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoutes";
+
+
 
 function Layout() {
   const location = useLocation();
@@ -40,8 +43,8 @@ function Layout() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Layout />
-    </BrowserRouter>
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
   );
 }

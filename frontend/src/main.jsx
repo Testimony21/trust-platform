@@ -1,12 +1,17 @@
 import React from 'react';
-import ReactDom from 'react-dom/client'
+import ReactDom from 'react-dom/client';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx';
 
 ReactDom.createRoot(document.getElementById('root')).render(
-  <AuthProvider>
+ <React.StrictMode>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+ <AuthProvider>
     <App />
-  </AuthProvider>,
+  </AuthProvider>
+  </GoogleOAuthProvider>
+ </React.StrictMode>
 );
 

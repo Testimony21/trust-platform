@@ -1,6 +1,8 @@
 // ===============================
 // controllers/buyerController.js
 // ===============================
+
+const User = require("../models/User");
 const BuyerProfile = require("../models/BuyerProfile");
 const SellerProfile = require("../models/SellerProfile");
 
@@ -61,49 +63,51 @@ exports.verifySeller = async (req, res) => {
   try {
     const { query } = req.body;
 
-    if (!query) {
-      return res.status(400).json({
-        message: "Search query required"
-      });
+    if (!query || !query.trim()) {
+      return res.status(400).json({ message: "Search query required" });
     }
 
-    const seller = await SellerProfile.findOne({
+    const searchTerm = query.trim();
+    const words = searchTerm.split(/\s+/).filter(Boolean);
+
+    // Require ALL words to appear in fullName (AND, not OR)
+    const nameMatch = {
+      $and: words.map((word) => ({
+        fullName: { $regex: word, $options: "i" }
+      }))
+    };
+
+    const matchedUser = await User.findOne({
+      role: "seller",
       $or: [
-        { email: query },
-        { username: query },
-        { phone: query }
-      ]
+        nameMatch,
+        { email: { $regex: searchTerm, $options: "i" } },
+        { phone: { $regex: searchTerm, $options: "i" } },
+      ],
     });
 
-    if (!seller) {
-      return res.status(404).json({
-        message: "Seller not found"
-      });
+    if (!matchedUser) {
+      return res.status(404).json({ message: "Seller not found" });
     }
 
-    const profile = await BuyerProfile.findOne({
-      userId: req.user.id
-    });
+    const sellerProfile = await SellerProfile.findOne({ userId: matchedUser._id });
+    const profile = await BuyerProfile.findOne({ userId: req.user.id });
 
     if (profile) {
       profile.checksMade += 1;
-
-      profile.recentActivity.unshift(
-        `Checked ${seller.username || seller.email}`
-      );
-
+      profile.recentActivity.unshift(`Checked ${matchedUser.fullName || matchedUser.email}`);
       await profile.save();
     }
 
     res.json({
       seller: {
-        _id: seller._id,
-        username: seller.username,
-        email: seller.email,
-        phone: seller.phone,
-        trustScore: seller.trustScore,
-        isVerified: seller.isVerified,
-        reports: seller.reports
+        _id: matchedUser._id,
+        fullName: matchedUser.fullName,
+        email: matchedUser.email,
+        phone: matchedUser.phone,
+        trustScore: sellerProfile?.trustScore ?? 0,
+        isVerified: sellerProfile?.isVerified ?? false,
+        reports: sellerProfile?.reports ?? 0,
       }
     });
 

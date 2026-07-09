@@ -5,6 +5,51 @@
   background: #0c0714;
 }
 
+.google-auth {
+  margin: 24px 0 20px;
+}
+
+.google-auth > div {
+  width: 100% !important;
+}
+
+.google-auth iframe {
+  width: 100% !important;
+}
+
+.google-auth [role="button"] {
+  width: 100% !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  overflow: hidden;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0;
+}
+
+.auth-divider span {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+}
+
+.auth-divider p {
+  margin: 0;
+  color: #777184;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
 /* LEFT */
 .login-left {
   background:
@@ -200,10 +245,25 @@
   background: transparent;
   color: #fff;
   font-size: 0.9rem;
+  caret-color: #fff;
 }
 
 .login-field input::placeholder {
   color: #555;
+}
+
+.login-field input:-webkit-autofill,
+.login-field input:-webkit-autofill:hover,
+.login-field input:-webkit-autofill:focus,
+.login-field input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff;
+  box-shadow: 0 0 0 1000px #171020 inset;
+  border: none;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.login-field input:-webkit-autofill::first-line {
+  color: #fff;
 }
 
 .login-btn {
