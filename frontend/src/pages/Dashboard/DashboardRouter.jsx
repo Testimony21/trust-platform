@@ -1,13 +1,15 @@
 import { useAuth } from "../../context/AuthContext";
 import BuyerDashboard from "./BuyerDashboard";
 import SellerDashboard from "./SellerDashboard";
+import OnboardingModal from "../../components/OnboardingModal/OnboardingModal";
 import { useNavigate } from "react-router-dom";
 import DashboardLoader from "../../components/DashboardLoader/DashboardLoader";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function DashboardRouter() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -15,11 +17,40 @@ export default function DashboardRouter() {
     }
   }, [user, loading]);
 
+useEffect(() => {
+    if (!user) return;
+
+  const key = `onboarding_seen_${user.id || user._id}`;
+    const seen = localStorage.getItem(key);
+
+    if (!seen) {
+      setShowOnboarding(true);
+    }
+  }, [user]);
+
+  const handleCloseOnboarding = () => {
+    const key = `onboarding_seen_${user.id || user._id}`;
+    localStorage.setItem(key, "true");
+    setShowOnboarding(false);
+  };
+
   if (loading) return <DashboardLoader />;
   if (!user) return null;
 
-  if (user.role === "buyer") return <BuyerDashboard />;
-  if (user.role === "seller") return <SellerDashboard />;
+  return (
+    <>
+      {showOnboarding && (
+        <OnboardingModal
+          role={user.role}
+          onClose={handleCloseOnboarding}
+        />
+      )}
 
-  return <p style={{ color: "white", padding: "40px" }}>Unknown role</p>;
+      {user.role === "buyer" && <BuyerDashboard />}
+      {user.role === "seller" && <SellerDashboard />}
+      {user.role !== "buyer" && user.role !== "seller" && (
+        <p style={{ color: "white", padding: "40px" }}>Unknown role</p>
+      )}
+    </>
+  );
 }

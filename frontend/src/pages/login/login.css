@@ -18,7 +18,7 @@
 }
 
 .google-auth [role="button"] {
-  width: 100% !important;
+  width: 400px !important;
   border-radius: 12px !important;
   background: rgba(255, 255, 255, 0.06) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;

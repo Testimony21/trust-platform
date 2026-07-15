@@ -9,6 +9,7 @@ import {
 import useReveal from "../../hooks/useReveal";
 import logo from "../../assets/images/bg-logo.png";  
 import { ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   useReveal();
@@ -36,9 +37,9 @@ export default function Footer() {
 
         </div>
 
-        <button className="footer-btn reveal">
+        <Link to="/verify-seller" className="footer-btn reveal">
           Get Started
-        </button>
+        </Link>
 
       </div>
 

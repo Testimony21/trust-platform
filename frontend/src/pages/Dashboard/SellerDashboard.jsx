@@ -13,7 +13,6 @@ import {
   Settings,
   LayoutDashboard,
   LogOut,
-  Search,
 } from "lucide-react";
 import "./SellerDashboard.css";
 
@@ -37,6 +36,30 @@ export default function SellerDashboard() {
     logout();
     navigate("/");
   };
+
+  const checklistItems = [
+    {
+      done: !!user.fullName && !!user.phone,
+      label: "Complete your profile",
+      link: "/dashboard/profile",
+      linkText: "Go to Profile →",
+    },
+    {
+      done: false,
+      label: "Verify your identity",
+      link: "/dashboard/verification",
+      linkText: "Start Verification →",
+    },
+    {
+      done: false,
+      label: "Get your first buyer review",
+      link: "/dashboard/trust-score",
+      linkText: "Learn More →",
+    },
+  ];
+
+  const allDone = checklistItems.every((item) => item.done);
+  const doneCount = checklistItems.filter((i) => i.done).length;
 
   return (
     <div className="dash">
@@ -96,7 +119,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        {/* ALERT — new account */}
+        {/* ALERT */}
         <div className="dash-alert">
           <AlertTriangle size={17} />
           <span>Your trust score starts at 0. Complete your profile and get buyer reviews to grow it.</span>
@@ -166,42 +189,38 @@ export default function SellerDashboard() {
             </div>
           </div>
 
-          {/* NEXT STEPS */}
-          <div className="dash-section">
-            <h2>Get started</h2>
-            <div className="dash-steps">
-              <div className="dash-step">
-                <div className="dash-step-num">1</div>
-                <div>
-                  <strong>Complete your profile</strong>
-                  <p>Add your bio, photo, and social links.</p>
-                  <Link to="/dashboard/profile" className="dash-step-link">
-                    Go to Profile →
-                  </Link>
-                </div>
+          {/* ONBOARDING CHECKLIST */}
+          {!allDone && (
+            <div className="dash-section">
+              <div className="checklist-header">
+                <h2>Get started</h2>
+                <span>{doneCount}/{checklistItems.length} done</span>
               </div>
-              <div className="dash-step">
-                <div className="dash-step-num">2</div>
-                <div>
-                  <strong>Verify your identity</strong>
-                  <p>Submit ID to unlock full seller features.</p>
-                  <Link to="/dashboard/verification" className="dash-step-link">
-                    Start Verification →
-                  </Link>
-                </div>
+              <div className="checklist-progress">
+                <div
+                  className="checklist-bar"
+                  style={{ width: `${(doneCount / checklistItems.length) * 100}%` }}
+                />
               </div>
-              <div className="dash-step">
-                <div className="dash-step-num">3</div>
-                <div>
-                  <strong>Get your first review</strong>
-                  <p>Share your profile link with buyers to start building trust.</p>
-                  <Link to="/dashboard/trust-score" className="dash-step-link">
-                    Learn More →
-                  </Link>
-                </div>
+              <div className="checklist-items" style={{ marginTop: "16px" }}>
+                {checklistItems.map((item, i) => (
+                  <div key={i} className={`checklist-item ${item.done ? "done" : ""}`}>
+                    <div className="checklist-tick">
+                      {item.done ? "✓" : i + 1}
+                    </div>
+                    <div>
+                      <strong>{item.label}</strong>
+                      {!item.done && (
+                        <Link to={item.link} className="dash-step-link">
+                          {item.linkText}
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
+          )}
 
         </div>
       </main>

@@ -1,5 +1,106 @@
 @import "./SellerDashboard.css"; /* reuse all .dash, .dash-card, .dash-sidebar etc */
 
+.onboarding-checklist {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.checklist-header h2 {
+  font-size: 1rem;
+  color: #eee;
+  margin: 0;
+}
+
+.checklist-header span {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.checklist-progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.checklist-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8f44ff, #b26cff);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.checklist-tick {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(178, 108, 255, 0.4);
+  background: rgba(140, 0, 255, 0.1);
+  color: #b26cff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.checklist-item.done .checklist-tick {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+}
+
+.checklist-item strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #eee;
+  margin-bottom: 3px;
+}
+
+.checklist-item.done strong {
+  color: #555;
+  text-decoration: line-through;
+}
+
+.checklist-item p {
+  font-size: 0.8rem;
+  color: #777;
+  margin: 0;
+}
+
+.trust-label {
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+.trust-high { color: #22c55e; }
+.trust-medium { color: #f59e0b; }
+.trust-low { color: #f87171; }
+
 .buyer-search-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -173,6 +274,8 @@
 .buyer-result-actions {
   display: flex;
   gap: 10px;
+  flex-direction: column;
+  margin-top: 20px;
 }
 
 .btn-outline,
@@ -206,4 +309,50 @@
 
 .dash-bottom.single {
   grid-template-columns: 1fr;
+}
+
+/* Replace or update your existing .start-deal-btn */
+.start-deal-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(143, 68, 255, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.start-deal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(143, 68, 255, 0.5);
+}
+
+.start-deal-btn:active {
+  transform: scale(0.98);
+}
+
+.start-deal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.buyer-result-secondary {
+  display: flex;
+  gap: 10px;
+}
+
+.buyer-result-secondary .btn-outline,
+.buyer-result-secondary .btn-danger {
+  flex: 1;
 }

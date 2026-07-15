@@ -19,12 +19,12 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            {/* <a href="#how">How it works</a>
-            <a href="#why">Why trust</a> */}
             <Link to="/login" className="btn ghost">Login</Link>
           </>
         )}
         <Link to="/verify-seller" className="btn solid">Verify a Seller</Link>
+
+        <Link to="/deals" className="btn ghost">Transactions</Link>
       </nav>
     </header>
   );

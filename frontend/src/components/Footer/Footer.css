@@ -82,12 +82,13 @@
 }
 
 .footer-btn {
+  text-decoration: none;
   position: relative;
   z-index: 2;
 
   height: 52px;
 
-  padding: 0 24px;
+  padding: 18px 24px;
 
   border: none;
   border-radius: 14px;
@@ -107,6 +108,7 @@
   white-space: nowrap;
 
   transition: 0.3s ease;
+
 }
 
 .footer-btn:hover {

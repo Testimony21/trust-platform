@@ -1,0 +1,189 @@
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 24px;
+}
+
+.onboarding-modal {
+  width: 100%;
+  max-width: 480px;
+  background:
+    linear-gradient(135deg, #0e0820, #12092a);
+  border: 1px solid rgba(178, 108, 255, 0.2);
+  border-radius: 24px;
+  padding: 40px 36px;
+  position: relative;
+  text-align: center;
+}
+
+.onboarding-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: #888;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.onboarding-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.onboarding-badge {
+  display: inline-block;
+  background: rgba(140, 0, 255, 0.15);
+  color: #d2b3ff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  margin-bottom: 16px;
+}
+
+.onboarding-modal h2 {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.onboarding-sub {
+  color: #888;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.onboarding-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.onboarding-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.2s;
+}
+
+.onboarding-dot.active {
+  background: #8f44ff;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.onboarding-dot.done {
+  background: #b26cff;
+}
+
+.onboarding-step {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 28px;
+}
+
+.onboarding-step-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(140, 0, 255, 0.15);
+  color: #b26cff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.onboarding-step h3 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.onboarding-step p {
+  color: #888;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.onboarding-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.onboarding-next {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.onboarding-next:hover {
+  opacity: 0.9;
+}
+
+.onboarding-skip {
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.onboarding-skip:hover {
+  color: #999;
+}
+
+.onboarding-secondary {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.onboarding-back {
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: color 0.2s;
+}
+
+.onboarding-back:hover {
+  color: #b26cff;
+}
+
+@media (max-width: 560px) {
+  .onboarding-modal {
+    padding: 32px 24px;
+  }
+}

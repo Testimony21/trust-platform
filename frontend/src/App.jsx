@@ -10,13 +10,15 @@ import SellerDashboard from "./pages/Dashboard/SellerDashboard";
 import DashboardRouter from "./pages/Dashboard/DashboardRouter";
 import GetVerified from "./pages/GetVerified/GetVerified";
 import Navbar from "./components/Navbar/Navbar";
+import Deals from "./pages/Deals/Deals";
+import DealRoom from "./pages/DealRoom/DealRoom";
 // import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoutes";
 
 
 
 function Layout() {
   const location = useLocation();
-  const hideNavbar = ["/login", "/register", "/dashboard"].includes(location.pathname);
+  const hideNavbar = ["/login", "/register", "/dashboard", "/deals"].includes(location.pathname);
 
   return (
     <>
@@ -32,6 +34,8 @@ function Layout() {
 
         {/* Private Pages */}
         <Route path="/dashboard" element={<DashboardRouter />} />
+        <Route path="/deals" element={<Deals />} />
+        <Route path="/deals/:id" element={<DealRoom />} />
 
         {/* 404 */}
         {/* <Route path="*" element={<NotFound />} /> */}

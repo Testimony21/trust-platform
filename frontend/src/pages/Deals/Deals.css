@@ -1,0 +1,345 @@
+.deals-page {
+  min-height: 100vh;
+  padding: 90px 7%;
+  background:
+    radial-gradient(circle at top right, rgba(90, 0, 180, 0.18), transparent 38%),
+    radial-gradient(circle at bottom left, rgba(55, 0, 120, 0.14), transparent 40%),
+    linear-gradient(135deg, #05050a, #0c0718 45%, #140624);
+  color: #fff;
+  position: relative;
+}
+
+.deals-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.deals-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.deals-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 34px;
+}
+
+.deals-kicker {
+  display: inline-flex;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: rgba(143, 68, 255, 0.18);
+  color: #d7bdff;
+  font-size: 0.78rem;
+  margin-bottom: 14px;
+}
+
+.deals-header h1 {
+  font-size: 2.4rem;
+  margin: 0 0 10px;
+}
+
+.deals-header p {
+  max-width: 650px;
+  color: #aaa2b8;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.deals-state,
+.deals-error,
+.deals-empty {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.045);
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.deals-error {
+  color: #f87171;
+}
+
+.deals-empty {
+  text-align: center;
+  padding: 52px 24px;
+}
+
+.deals-empty svg {
+  color: #b26cff;
+  margin-bottom: 12px;
+}
+
+.deals-empty h2 {
+  margin: 0 0 8px;
+}
+
+.deals-empty p {
+  color: #aaa2b8;
+}
+
+.deals-empty a {
+  display: inline-flex;
+  margin-top: 12px;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+
+.deals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.deal-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.055);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.deal-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  color: #b9adc9;
+}
+
+.deal-status {
+  display: inline-flex;
+  text-transform: capitalize;
+  font-size: 0.76rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #d8d2e3;
+}
+
+.status-completed {
+  background: rgba(34, 197, 94, 0.14);
+  color: #86efac;
+}
+
+.status-disputed {
+  background: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+}
+
+.status-delivered,
+.status-payment_sent {
+  background: rgba(250, 204, 21, 0.14);
+  color: #fde68a;
+}
+
+.deal-card h2 {
+  font-size: 1.15rem;
+  margin: 0 0 18px;
+}
+
+.deal-meta {
+  display: grid;
+  gap: 12px;
+}
+
+.deal-meta p {
+  margin: 0;
+  color: #eee;
+  font-size: 0.92rem;
+}
+
+.deal-meta span {
+  display: block;
+  color: #7d758b;
+  font-size: 0.75rem;
+  margin-bottom: 3px;
+}
+
+.deal-open {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+  padding: 12px;
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  font-weight: 600;
+}
+
+.gate-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top right, rgba(90, 0, 180, 0.18), transparent 38%),
+    radial-gradient(circle at bottom left, rgba(55, 0, 120, 0.14), transparent 40%),
+    linear-gradient(135deg, #05050a, #0c0718 45%, #140624);
+  padding: 24px;
+  position: relative;
+}
+
+.gate-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+  pointer-events: none;
+}
+
+
+.gate-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 7%;
+  background: rgba(10, 10, 20, 0.6);
+  backdrop-filter: blur(14px);
+  z-index: 2;
+}
+
+.gate-nav img {
+  height: 95px;
+  width: auto;
+  object-fit: contain;
+}
+
+
+.gate-card {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 48px 36px;
+}
+
+.gate-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(143, 68, 255, 0.15);
+  color: #b26cff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.gate-card h2 {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.gate-card p {
+  color: #888;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.gate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gate-actions .primary,
+.gate-actions .secondary {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gate-actions .primary {
+  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  color: #fff;
+}
+
+.gate-actions .secondary {
+  background: transparent;
+  border: 1px solid #333;
+  color: #ccc;
+}
+
+.deal-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.deal-delete {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+  color: #f87171;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.deal-delete:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+
+@media (max-width: 950px) {
+  .deals-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .deals-page {
+    padding: 70px 5%;
+  }
+
+  .deals-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .deals-grid {
+    grid-template-columns: 1fr;
+  }
+}
