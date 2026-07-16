@@ -3,8 +3,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(10, 10, 20, 0.6);
-  backdrop-filter: blur(14px);
+  padding: 0 7%;
+  background: rgba(8, 10, 18, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   left: 0;
@@ -19,65 +22,94 @@
   align-items: center;
   height: 100%;
   text-decoration: none;
-
 }
 
 .logo img {
-  padding: 0px 35%;
-  height: 95px;      /* adjust this until it fits nicely */
+  height: 90px;
   width: auto;
   display: block;
   object-fit: contain;
-   /* transform: translateY(20px);  */
+  transition: transform 0.2s ease;
+}
+
+.logo:hover img {
+  transform: scale(1.03); /* Subtle premium hover feedback on the logo */
 }
 
 nav {
-  padding: 0px 7%;
-
   display: flex;
-  gap: 18px;
+  gap: 16px;
   align-items: center;
 }
 
 nav a {
-  color: #ddd;
+  color: var(--text-muted);
   text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+nav a:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .btn {
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .ghost {
-  border: 1px solid #6d40b8;
+  border: 1px solid var(--border);
+  color: var(--text-muted) !important;
+  background: transparent;
+}
+
+.ghost:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--text) !important;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .solid {
-  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  background: var(--primary);
   color: white !important;
+  border: none;
+  box-shadow: 0 4px 12px var(--primary-glow);
 }
 
+.solid:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+}
 
 @media (max-width: 560px) {
   .navbar {
     height: 60px;
-    padding: 0 24px;
+    padding: 0 16px;
   }
 
   .logo img {
-    height: 50px;
+    height: 44px;
     padding: 0;
-    margin-left: 0;
   }
 
-  nav {
-    gap: 6px;
-  }
+  nav { gap: 6px; }
 
   .btn {
     padding: 6px 10px;
-    font-size: 0.72rem;
+    font-size: 0.8rem;
   }
 }

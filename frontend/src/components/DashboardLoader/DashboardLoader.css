@@ -4,9 +4,9 @@
   justify-content: center;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top right, rgba(90, 0, 180, 0.18), transparent 38%),
-    radial-gradient(circle at bottom left, rgba(55, 0, 120, 0.14), transparent 40%),
-    linear-gradient(135deg, #05050a, #0c0718 45%, #140624);
+    radial-gradient(circle at top right, var(--primary-glow), transparent 38%),
+    radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.05), transparent 40%),
+    var(--bg); 
 }
 
 .tp-loader-stack {
@@ -25,17 +25,82 @@
   justify-content: center;
 }
 
-.tp-loader-ring {
+/* THE OUTER SPINNING RING SVG */
+svg.tp-loader-ring {
   position: absolute;
   top: 0;
   left: 0;
-  animation: tp-spin 1.4s linear infinite;
+  width: 64px;
+  height: 64px;
+  
+  /* Force hardware accelerated rotation */
+  animation: tp-rotate-spin 1.4s linear infinite !important;
+  
+  /* CRITICAL: forces SVGs to rotate exactly around their center point */
+  transform-origin: 50% 50% !important; 
 }
 
-.tp-loader-shield {
-  animation: tp-pulse 1.6s ease-in-out infinite;
+/* INNER PULSATING SHIELD SVG */
+svg.tp-loader-shield {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  z-index: 2;
+  
+  /* Smooth scale pulsing */
+  animation: tp-shield-pulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+  transform-origin: 50% 50% !important;
 }
 
+/* ====== THEME VARIABLE COLOR COATING ====== */
+
+/* Ring base track */
+.tp-loader-ring .ring-bg {
+  stroke: var(--border) !important;
+  opacity: 0.4;
+}
+
+/* Spinning active arc */
+.tp-loader-ring .ring-active {
+  stroke: var(--primary-light) !important;
+}
+
+/* Inner shield background */
+.tp-loader-shield .shield-bg {
+  fill: var(--primary-light) !important;
+  stroke: var(--primary-light) !important;
+  opacity: 0.15;
+}
+
+/* Shield checkmark & borders */
+.tp-loader-shield .shield-check {
+  stroke: var(--primary-light) !important;
+  fill: none !important;
+}
+
+
+/* ====== PERFORMANCE OPTIMIZED KEYFRAMES ====== */
+@keyframes tp-rotate-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes tp-shield-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* ====== TYPOGRAPHY ====== */
 .tp-loader-text {
   text-align: center;
 }
@@ -44,21 +109,14 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: var(--text);
+  letter-spacing: -0.01em;
 }
 
 .tp-loader-sub {
   margin: 4px 0 0;
   font-size: 12px;
-  color: #888;
+  color: var(--text-muted);
   transition: opacity 0.3s ease;
-}
-
-@keyframes tp-spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes tp-pulse {
-  0%, 100% { opacity: 0.6; transform: scale(0.94); }
-  50% { opacity: 1; transform: scale(1); }
+  opacity: 0.85;
 }

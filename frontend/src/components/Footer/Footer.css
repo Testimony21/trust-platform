@@ -3,7 +3,7 @@
   margin-top: 15px;
   padding: 0 7% 40px;
   position: relative;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid var(--border);
 }
 
 /* CTA */
@@ -26,7 +26,7 @@
       rgba(255, 255, 255, 0.05),
       rgba(255, 255, 255, 0.03));
 
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border);
 
   backdrop-filter: blur(14px);
 
@@ -51,7 +51,7 @@
 
   background:
     radial-gradient(circle,
-      rgba(178, 108, 255, 0.18),
+      var(--primary-glow),
       transparent 70%);
 
   pointer-events: none;
@@ -70,11 +70,11 @@
 
   margin: 16px 0 12px;
 
-  color: white;
+  color: var(--text);
 }
 
 .footer-cta p {
-  color: #b8b8c7;
+  color: var(--text);
 
   line-height: 1.7;
 
@@ -88,15 +88,18 @@
 
   height: 52px;
 
-  padding: 18px 24px;
+  padding: 0 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   border: none;
   border-radius: 14px;
 
   background:
     linear-gradient(135deg,
-      #8f44ff,
-      #5b2cff);
+      var(--primary-light),
+      var(--primary));
 
   color: white;
 
@@ -107,12 +110,13 @@
 
   white-space: nowrap;
 
-  transition: 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 
 }
 
 .footer-btn:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
+  box-shadow:0 8px 20px var(--primary-glow);
 }
 
 /* MAIN */
@@ -132,24 +136,28 @@
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-start;
+  width: 180px;
+  /* gap: 10px; */
   height: 46px;          /* fixed space reserved in footer */
-  overflow: visible;
-  transform: translateX(-23px);
+  overflow: hidden;
+  /* transform: translateX(-23px); */
 }
 
 .brand-logo img {
   height: 110px;          /* visual logo size */
   width: auto;
-  display: block;
+  /* display: block; */
+  margin-left: -20px;   
+  margin-top: -5px;
   object-fit: contain;
-  transform: translateY(-5px);
+  /* transform: translateY(-5px); */
 }
 
 .footer-brand p {
   margin-top: 22px;
 
-  color: #b6b6c5;
+  color: var(--text-muted);
 
   line-height: 1.8;
 }
@@ -172,21 +180,20 @@
   align-items: center;
   justify-content: center;
 
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.02);
 
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border);
 
-  color: #d7d7e0;
+  color: var(--text-muted);
 
-  transition: 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .socials a:hover {
-  transform: translateY(-4px);
-
-  border-color: rgba(178, 108, 255, 0.4);
-
-  color: #b26cff;
+  background: rgba(99, 102, 241, 0.08); /* Semi-transparent version of your primary color */
+  transform: translateY(-3px);
+  border-color: var(--primary-light); /* Dynamic border hover color */
+  color: var(--primary-light);
 }
 
 /* LINKS */
@@ -201,25 +208,24 @@
 .footer-links h4 {
   margin-bottom: 22px;
 
-  color: white;
+  color: var(--text);
 
   font-size: 1rem;
 }
 
 .footer-links a {
   display: block;
-
   margin-bottom: 14px;
 
   text-decoration: none;
 
-  color: #aaaab8;
+  color: var(--text-muted);
 
-  transition: 0.25s ease;
+  transition: color 0.25s ease transform 0.25s ease;
 }
 
 .footer-links a:hover {
-  color: #b26cff;
+  color: var(--primary-light);
   transform: translateX(3px);
 }
 
@@ -228,14 +234,14 @@
   margin-top: 70px;
   padding-top: 28px;
 
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
 
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
 
-  color: #8f90a6;
+  color: var(--text-muted);
 
   font-size: 0.92rem;
 }

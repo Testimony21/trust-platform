@@ -14,7 +14,7 @@ export default function HowItWorks() {
 
       <div className="section-header how-reveal">
 
-        <span className="mini-title">
+        <span className="min-title">
           HOW IT WORKS
         </span>
 

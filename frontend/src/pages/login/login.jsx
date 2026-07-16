@@ -100,16 +100,18 @@ export default function Login() {
           {error && <div className="login-error">{error}</div>}
 
           <div className="google-auth">
-            <GoogleLogin
-              onSuccess={handleGoogleLogin}
-              onError={() => setError("Google login failed")}
-              theme="filled_black"
-              size="large"
-              text="signin_with"
-              width="100%"
-            />
+            <div className="google-signin-btn-container">
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => setError("Google login failed")}
+                theme="filled_black"
+                size="large"
+                text="signin_with"
+                width="100%"
+              />
+            </div>
           </div>
-
+          
           <div className="auth-divider">
             <span></span>
             <p>or continue with email</p>

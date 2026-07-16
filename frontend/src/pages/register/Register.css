@@ -2,15 +2,15 @@
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: #0c0714;
+  background: var(--bg); /* Combined with landing page background */
 }
 
-/* LEFT */
+/* LEFT COLUMN (PROCESS/STEPS) */
 .register-left {
   background:
-    radial-gradient(circle at top left, rgba(90, 0, 180, 0.2), transparent 50%),
-    radial-gradient(circle at bottom right, rgba(55, 0, 120, 0.15), transparent 50%),
-    #08050f;
+    radial-gradient(circle at top left, var(--primary-glow), transparent 50%),
+    radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.05), transparent 50%),
+    #080a12; /* Fallback matching deep dark theme base */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,8 +24,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
 }
@@ -37,10 +37,11 @@
 }
 
 .reg-steps-title {
-  color: #b26cff;
+  color: var(--primary-light);
   font-size: 0.8rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   margin-bottom: 32px;
 }
 
@@ -55,9 +56,9 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(140, 0, 255, 0.2);
-  border: 1px solid rgba(178, 108, 255, 0.4);
-  color: #b26cff;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: var(--primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,13 +69,13 @@
 
 .reg-step strong {
   display: block;
-  color: #fff;
+  color: var(--text);
   font-size: 0.95rem;
   margin-bottom: 4px;
 }
 
 .reg-step p {
-  color: #888;
+  color: var(--text-muted);
   font-size: 0.85rem;
   line-height: 1.5;
   margin: 0;
@@ -83,20 +84,21 @@
 .reg-trust-note {
   margin-top: 40px;
   padding: 14px 18px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  color: #888;
+  color: var(--text-muted);
   font-size: 0.85rem;
+  opacity: 0.8;
 }
 
-/* RIGHT */
+/* RIGHT COLUMN (FORM CARD) */
 .register-right {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 60px 40px;
-  background: #0c0714;
+  background: var(--bg);
 }
 
 .register-card {
@@ -108,29 +110,32 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(140, 0, 255, 0.15);
-  color: #d2b3ff;
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--primary-light);
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 0.8rem;
+  border: 1px solid rgba(99, 102, 241, 0.2);
   margin-bottom: 20px;
 }
 
 .register-card h2 {
   font-size: 1.9rem;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .reg-sub {
-  color: #888;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 28px;
 }
 
 .reg-error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
   color: #f87171;
   padding: 10px 14px;
   border-radius: 8px;
@@ -152,29 +157,36 @@
 
 .reg-field label {
   font-size: 0.85rem;
-  color: #ccc;
+  color: var(--text);
+  opacity: 0.85;
   font-weight: 500;
 }
 
+/* INPUT COMPONENT POLISH WITH SEAMLESS TRANSITIONS */
 .reg-field input {
   padding: 13px 16px;
   border-radius: 10px;
-  border: 1px solid #2a2a35;
-  background: rgba(255,255,255,0.04);
-  color: #fff;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
   font-size: 0.9rem;
   outline: none;
-  transition: border-color 0.2s;
+  caret-color: var(--primary-light);
+  transition: border-color 0.25s, box-shadow 0.25s, background-color 0.25s;
 }
 
 .reg-field input:focus {
-  border-color: #8f44ff;
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 0 3px var(--primary-glow);
 }
 
 .reg-field input::placeholder {
-  color: #555;
+  color: var(--text-muted);
+  opacity: 0.5;
 }
 
+/* ROLE SELECTOR BUTTONS */
 .reg-role {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -184,80 +196,123 @@
 .role-btn {
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid #2a2a35;
-  background: rgba(255,255,255,0.04);
-  color: #aaa;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
+}
+
+.role-btn:hover:not(.active) {
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--text);
 }
 
 .role-btn.active {
-  border-color: #8f44ff;
-  background: rgba(140, 0, 255, 0.12);
-  color: #d2b3ff;
+  border-color: var(--primary-light);
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--primary-light);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
 }
 
+/* PRIMARY SUBMIT BUTTON */
 .reg-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 14px;
   border-radius: 10px;
   border: none;
-  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
   color: #fff;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   margin-top: 4px;
-  transition: opacity 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.reg-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px var(--primary-glow);
+}
+
+.reg-submit:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .reg-submit:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-.back-home {
+/* INVISIBLE AUTO-FILL FIX FOR REGISTER FIELDS */
+.reg-field input:-webkit-autofill,
+.reg-field input:-webkit-autofill:hover,
+.reg-field input:-webkit-autofill:focus,
+.reg-field input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--text) !important;
+  box-shadow: 0 0 0 1000px #0c0714 inset !important; 
+  
+  /* Instantly prevents Google / browser autofill from flashing solid block colors */
+  transition: background-color 600000s ease-in-out 0s, color 600000s ease-in-out 0s;
+}
+
+/* BACK HOME BUTTON (HIGH SPECIFICITY FOR HOVER ACCENT) */
+.register-page .back-home {
   position: absolute;
   top: 24px;
   left: 28px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #888;
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.85rem;
+  font-weight: 500;
   z-index: 10;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.register-page a.back-home:hover {
+  color: var(--primary-light) !important;
+  transform: translateX(-2px);
+}
+
+/* REDIRECT SIGNUP BOTTOM TEXT */
+.reg-login {
+  text-align: center;
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.reg-login a {
+  color: var(--primary-light);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 4px;
   transition: color 0.2s;
 }
 
-.back-home:hover {
-  color: #b26cff;
+.reg-login a:hover {
+  color: var(--primary);
 }
 
-/* MOBILE */
+/* MOBILE RESPONSIVENESS */
 @media (max-width: 768px) {
   .register-page {
     grid-template-columns: 1fr;
   }
 
   .register-left {
-    display: none;
+    display: none; /* Hide illustrative column on mobile to focus on form */
   }
 
   .register-right {
     padding: 40px 24px;
   }
-}
-
-.reg-login {
-  text-align: center;
-  margin-top: 24px;
-  color: #666;
-  font-size: 0.85rem;
-}
-
-.reg-login a {
-  color: #b26cff;
-  text-decoration: none;
-  font-weight: 500;
 }

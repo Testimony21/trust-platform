@@ -1,13 +1,36 @@
 :root {
-  --bg: #0f0f14;
-  --card: #1a1a22;
-  --text: #ffffff;
-  --muted: #a1a1aa;
-  --primary: #8b5cf6;
-  --primary-hover: #7c3aed;
-  --danger: #ef4444;
+  /* BACKGROUNDS */
+  --bg: #0d0f17;
+  --bg-2: #131620;
+  --card: #1a1d2e;
+  --card-hover: #1f2235;
+
+  /* TEXT */
+  --text: #e2e8f0;
+  --text-muted: #8892a4;
+  --text-dim: #4a5568;
+
+  /* PRIMARY — indigo/blue instead of neon purple */
+  --primary: #6366f1;
+  --primary-dark: #4f52d4;
+  --primary-light: #818cf8;
+  --primary-glow: rgba(99, 102, 241, 0.25);
+
+  /* ACCENT — softer violet for secondary elements */
+  --accent: #7c6ff7;
+  --accent-muted: rgba(124, 111, 247, 0.15);
+
+  /* STATUS */
+  --success: #10b981;
+  --success-muted: rgba(16, 185, 129, 0.12);
   --warning: #f59e0b;
-  --success: #22c55e;
+  --warning-muted: rgba(245, 158, 11, 0.12);
+  --danger: #ef4444;
+  --danger-muted: rgba(239, 68, 68, 0.12);
+
+  /* BORDERS */
+  --border: rgba(255, 255, 255, 0.07);
+  --border-active: rgba(99, 102, 241, 0.4);
 }
 
 * {
@@ -16,11 +39,11 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   overflow-x: clip;
   width: 100%;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, Arial, sans-serif;
+  font-family: "Inter", system-ui, Arial, sans-serif;
 }
+
