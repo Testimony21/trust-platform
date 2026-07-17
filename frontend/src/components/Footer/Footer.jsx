@@ -7,7 +7,7 @@ import {
   FaLinkedinIn
 } from "react-icons/fa";
 import useReveal from "../../hooks/useReveal";
-import logo from "../../assets/images/bg-logo.png";  
+import logo from "../../assets/images/new-logo.png";  
 import { ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 

@@ -1,23 +1,31 @@
 .deals-page {
   min-height: 100vh;
   padding: 90px 7%;
-  background:
-    radial-gradient(circle at top right, rgba(90, 0, 180, 0.18), transparent 38%),
-    radial-gradient(circle at bottom left, rgba(55, 0, 120, 0.14), transparent 40%),
-    linear-gradient(135deg, #05050a, #0c0718 45%, #140624);
+  /* 1. Exact homepage deep navy-slate base with a soft right-side ambient glow */
+  background: 
+    radial-gradient(circle at 85% 40%, rgba(99, 102, 241, 0.08) 0%, rgba(143, 68, 255, 0.04) 40%, transparent 70%),
+    #0b0f19 !important; 
   color: #fff;
   position: relative;
+  overflow: hidden;
 }
 
+/* 2. Seamless, fading grid lines */
 .deals-page::before {
   content: "";
   position: absolute;
   inset: 0;
+  
+  /* Extremely faint grid lines (only 1.5% opacity) */
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
   background-size: 60px 60px;
-  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+  
+  /* Mask that smoothly fades the grid out towards the edges of the screen */
+  mask-image: radial-gradient(circle at 50% 50%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 20%, transparent 80%);
+  
   pointer-events: none;
   z-index: 0;
 }
@@ -40,10 +48,12 @@
   display: inline-flex;
   padding: 7px 13px;
   border-radius: 999px;
-  background: rgba(143, 68, 255, 0.18);
-  color: #d7bdff;
+  /* Updated from old purple (rgba(143, 68, 255, 0.18)) to new periwinkle */
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--primary-light, #a5b4fc);
   font-size: 0.78rem;
   margin-bottom: 14px;
+  font-weight: 500;
 }
 
 .deals-header h1 {
@@ -61,7 +71,7 @@
 .deals-state,
 .deals-error,
 .deals-empty {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
   background: rgba(255, 255, 255, 0.045);
   border-radius: 18px;
   padding: 28px;
@@ -77,7 +87,7 @@
 }
 
 .deals-empty svg {
-  color: #b26cff;
+  color: var(--primary-light, #6366f1);
   margin-bottom: 12px;
 }
 
@@ -94,9 +104,16 @@
   margin-top: 12px;
   color: #fff;
   text-decoration: none;
-  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  /* Updated gradient to match brand button colors */
+  background: linear-gradient(135deg, var(--primary, #6366f1), var(--primary-light, #4f46e5));
   padding: 12px 18px;
   border-radius: 12px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.deals-empty a:hover {
+  opacity: 0.9;
 }
 
 .deals-grid {
@@ -106,10 +123,17 @@
 }
 
 .deal-card {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(8px);
   border-radius: 20px;
   padding: 24px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.deal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .deal-card-top {
@@ -149,6 +173,7 @@
 .deal-card h2 {
   font-size: 1.15rem;
   margin: 0 0 18px;
+  color: #fff;
 }
 
 .deal-meta {
@@ -177,8 +202,15 @@
   border-radius: 12px;
   color: #fff;
   text-decoration: none;
-  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  /* Periwinkle gradient background */
+  background: linear-gradient(135deg, var(--primary, #6366f1), var(--primary-light, #4f46e5));
   font-weight: 600;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.deal-open:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
 }
 
 .gate-screen {
@@ -187,8 +219,8 @@
   align-items: center;
   justify-content: center;
   background:
-    radial-gradient(circle at top right, rgba(90, 0, 180, 0.18), transparent 38%),
-    radial-gradient(circle at bottom left, rgba(55, 0, 120, 0.14), transparent 40%),
+    radial-gradient(circle at top right, var(--primary-glow, rgba(99, 102, 241, 0.15)), transparent 38%),
+    radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.05), transparent 40%),
     linear-gradient(135deg, #05050a, #0c0718 45%, #140624);
   padding: 24px;
   position: relative;
@@ -205,7 +237,6 @@
   mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
   pointer-events: none;
 }
-
 
 .gate-nav {
   position: absolute;
@@ -227,7 +258,6 @@
   object-fit: contain;
 }
 
-
 .gate-card {
   position: relative;
   z-index: 1;
@@ -235,7 +265,7 @@
   width: 100%;
   text-align: center;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
   border-radius: 20px;
   padding: 48px 36px;
 }
@@ -244,8 +274,9 @@
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: rgba(143, 68, 255, 0.15);
-  color: #b26cff;
+  /* Updated from old light-purple container */
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--primary-light, #a5b4fc);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -282,17 +313,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
 .gate-actions .primary {
-  background: linear-gradient(135deg, #8f44ff, #5b2cff);
+  /* Updated button from purple gradient to periwinkle */
+  background: linear-gradient(135deg, var(--primary, #6366f1), var(--primary-light, #4f46e5));
   color: #fff;
 }
 
 .gate-actions .secondary {
   background: transparent;
-  border: 1px solid #333;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ccc;
+}
+
+.gate-actions .primary:hover,
+.gate-actions .secondary:hover {
+  opacity: 0.9;
 }
 
 .deal-card-actions {
@@ -322,7 +360,6 @@
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.5);
 }
-
 
 @media (max-width: 950px) {
   .deals-grid {

@@ -145,10 +145,10 @@
 }
 
 .brand-logo img {
-  height: 110px;          /* visual logo size */
+  height: 150px;          /* visual logo size */
   width: auto;
   /* display: block; */
-  margin-left: -20px;   
+  margin-left: -5px;   
   margin-top: -5px;
   object-fit: contain;
   /* transform: translateY(-5px); */

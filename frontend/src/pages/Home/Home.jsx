@@ -1,5 +1,5 @@
 import "./Home.css";
-import heroLogo from "../../assets/images/hero.png";
+import heroLogo from "../../assets/images/new-badge.png";
 import { Link, useNavigate } from "react-router-dom";
 import HowItWorks from "../../components/HowItWorks/HowItWorks";
 import WhyTrust from "../../components/WhyTrust/WhyTrust";

@@ -3,10 +3,34 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  
+  /* 1. True premium slate-navy background and soft ambient glow */
   background:
-    radial-gradient(circle at top right, var(--primary-glow), transparent 38%),
-    radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.05), transparent 40%),
-    var(--bg); 
+    radial-gradient(circle at 85% 40%, rgba(99, 102, 241, 0.08) 0%, rgba(143, 68, 255, 0.04) 40%, transparent 70%),
+    #0b0f19 !important; 
+  
+  position: relative; /* CRITICAL: Required for the grid pseudo-element to align correctly */
+  overflow: hidden;
+}
+
+/* 2. ADDED: Seamless, faint grid lines (boxes) that fade toward the edges */
+.tp-loader-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  
+  /* Extremely faint grid lines (1.5% opacity) */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  
+  /* Radial mask to make the grid boxes fade out beautifully near the edges */
+  mask-image: radial-gradient(circle at 50% 50%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 20%, transparent 80%);
+  
+  pointer-events: none;
+  z-index: 1; /* Sits behind your spinner text/content */
 }
 
 .tp-loader-stack {
@@ -14,6 +38,8 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  position: relative;
+  z-index: 2; /* Ensures your spinner stays on top of the grid */
 }
 
 .tp-loader-spinner-wrap {

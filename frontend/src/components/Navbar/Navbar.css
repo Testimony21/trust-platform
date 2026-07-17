@@ -25,15 +25,17 @@
 }
 
 .logo img {
-  height: 90px;
+  height: 140px;
   width: auto;
   display: block;
   object-fit: contain;
+  transform: scale(1.4);
+  transform-origin: left center;
   transition: transform 0.2s ease;
 }
 
 .logo:hover img {
-  transform: scale(1.03); /* Subtle premium hover feedback on the logo */
+  transform: scale(1.44); /* Subtle premium hover feedback on the logo */
 }
 
 nav {
@@ -95,21 +97,98 @@ nav a:hover {
   transform: translateY(-1px);
 }
 
-@media (max-width: 560px) {
+/* TABLETS & SMALL LAPTOPS (e.g., iPads, Foldables) */
+@media (max-width: 820px) {
   .navbar {
-    height: 60px;
-    padding: 0 16px;
+    height: 65px;
+    padding: 0 4%; /* Brings content in slightly to match compressed hero paddings */
   }
 
   .logo img {
-    height: 44px;
-    padding: 0;
+    height: 100px;
+    transform: scale(1.4);
   }
 
-  nav { gap: 6px; }
+  nav {
+    gap: 8px; /* Tighter gap between links */
+  }
+
+  nav a {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+  }
+}
+
+/* MOBILE PHONES (e.g., iPhones, Pixels, Galaxies) */
+@media (max-width: 480px) {
+  .navbar {
+    height: 60px;
+    padding: 0 16px; /* Tight side padding for maximum space */
+  }
+
+  .logo img {
+    height: 48px; /* Clean, recognizable branding height without taking over the header */
+  }
+
+  nav {
+    gap: 4px; /* Minimal gap to keep links from wrapping onto a second line */
+  }
+
+  nav a {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
 
   .btn {
     padding: 6px 10px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+    border-radius: 6px; /* Slightly sharper border-radius looks premium on tiny buttons */
+  }
+}
+
+/* ULTRA-SMALL SCREENS (e.g., iPhone SE, older/smaller devices < 360px) */
+@media (max-width: 360px) {
+  .navbar {
+    height: 56px;
+    padding: 0 10px; /* Bring padding to a minimum */
+    gap: 8px;
+  }
+
+  .logo img {
+    height: 38px; /* Slightly more compact to save precious width */
+  }
+
+  /* 
+    Turn the nav container into a swipeable tab bar!
+    This keeps the links on one line without shrinking the text into illegibility.
+  */
+  nav {
+    gap: 2px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
+    max-width: 160px; /* Constrains links so they don't push the CTA off-screen */
+  }
+
+  nav::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+  }
+
+  nav a {
+    font-size: 0.75rem;
+    padding: 4px 6px;
+    flex-shrink: 0; /* Prevents the links from compressing/squeezing */
+  }
+
+  .btn {
+    padding: 5px 8px;
+    font-size: 0.72rem;
+    flex-shrink: 0; /* Pinned to the right, never collapses */
   }
 }

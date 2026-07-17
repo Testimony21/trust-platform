@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import logo from "../../assets/images/bg-logo.png";  
+import logo from "../../assets/images/new-logo.png";  
 import "./Navbar.css";
 
 export default function Navbar() {
