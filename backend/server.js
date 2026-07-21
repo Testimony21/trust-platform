@@ -12,6 +12,9 @@ const rateLimit = require("express-rate-limit");
 const http = require("http");
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
+const verificationRoutes = require("./routes/verificationRoutes");
+const adminRoutes = require("./routes/adminVerificationRoutes");
+
 const Message = require("./models/Message"); // <-- create a Message model
 
 dotenv.config();
@@ -33,6 +36,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/seller", sellerRoutes);
 app.use("/api/buyer", buyerRoutes);
 app.use("/api/deals", dealRoutes);
+app.use("/api/verification", verificationRoutes);
+app.use("/api/admin/verification", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("Trust Platform API Running");

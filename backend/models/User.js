@@ -7,8 +7,13 @@ const userSchema = new mongoose.Schema({
   phone: { type: String },  
   role: {
     type: String,
-    enum: ["buyer", "seller", "both"],
+    enum: ["buyer", "seller", "both", "admin"],
     default: "buyer"
+  },
+
+  isAdmin: {
+    type: Boolean,
+    default: false // Strictly false by default
   },
 
   createdAt: { type: Date, default: Date.now }
