@@ -58,10 +58,10 @@ export default function Deals() {
           <div className="gate-icon">
             <Lock size={28} />
           </div>
-          <h2>Sign in to view Deals</h2>
+          <h2>Sign in to continue</h2>
           <p>
-            Create an account or log in to access transactions,
-            chat with buyers and sellers, and leave reviews.
+            Create an account or log in to verify sellers, access transactions,
+            and trade safely on Trust-Platform.
           </p>
           <div className="gate-actions">
             <Link to="/register" className="primary">Create account</Link>

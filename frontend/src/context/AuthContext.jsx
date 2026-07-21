@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
           },
         });
 
-        setUser(res.data);
+        setUser(res.data.user);
       } catch (err) {
         console.log(err);
         setToken(null);

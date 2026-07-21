@@ -37,26 +37,26 @@ export default function SellerDashboard() {
     navigate("/");
   };
 
-  const checklistItems = [
-    {
-      done: !!user.fullName && !!user.phone,
-      label: "Complete your profile",
-      link: "/dashboard/profile",
-      linkText: "Go to Profile →",
-    },
-    {
-      done: false,
-      label: "Verify your identity",
-      link: "/dashboard/verification",
-      linkText: "Start Verification →",
-    },
-    {
-      done: false,
-      label: "Get your first buyer review",
-      link: "/dashboard/trust-score",
-      linkText: "Learn More →",
-    },
-  ];
+const checklistItems = [
+  {
+    done: !!user.fullName && !!user.phone,
+    label: "Complete your profile",
+    link: "/dashboard/profile",
+    linkText: "Complete Profile →",
+  },
+  {
+    done: false,
+    label: "Complete your first transaction",
+    link: "/dashboard/transactions",
+    linkText: "View Transactions →",
+  },
+  {
+    done: false,
+    label: "Receive your first buyer review",
+    link: "/dashboard/reviews",
+    linkText: "Learn More →",
+  },
+];
 
   const allDone = checklistItems.every((item) => item.done);
   const doneCount = checklistItems.filter((i) => i.done).length;
@@ -79,10 +79,15 @@ export default function SellerDashboard() {
               <User size={18} /> Profile
             </Link>
             <Link to="/dashboard/verification" className="dash-nav-item">
-              <BadgeCheck size={18} /> Verification
+              <BadgeCheck size={18} /> Verification Status
             </Link>
-            <Link to="/dashboard/trust-score" className="dash-nav-item">
-              <Star size={18} /> Trust Score
+
+            <Link to="/dashboard/transactions" className="dash-nav-item">
+              <ShieldCheck size={18} /> Transactions
+            </Link>
+
+            <Link to="/dashboard/reviews" className="dash-nav-item">
+              <Star size={18} /> Reviews
             </Link>
             <Link to="/dashboard/settings" className="dash-nav-item">
               <Settings size={18} /> Settings
@@ -122,34 +127,29 @@ export default function SellerDashboard() {
         {/* ALERT */}
         <div className="dash-alert">
           <AlertTriangle size={17} />
-          <span>Your trust score starts at 0. Complete your profile and get buyer reviews to grow it.</span>
+
+          <span>
+            Your trust score is earned through successful transactions and buyer reviews.
+            Complete your profile so buyers know who they're dealing with.
+          </span>
         </div>
 
         {/* STAT CARDS */}
         <div className="dash-cards">
           <div className="dash-card">
             <div className="dash-card-top">
-              <span className="dash-card-label">Trust Score</span>
-              <div className="dash-card-icon purple">
+              <span className="dash-card-label">Buyer Rating</span>
+
+              <div className="dash-card-icon orange">
                 <Star size={18} />
               </div>
             </div>
-            <p className="dash-card-value">0%</p>
-            <span className="dash-card-sub">No reviews yet</span>
-            <div className="dash-score-bar">
-              <div className="dash-score-fill" style={{ width: "0%" }} />
-            </div>
-          </div>
 
-          <div className="dash-card">
-            <div className="dash-card-top">
-              <span className="dash-card-label">Verification</span>
-              <div className="dash-card-icon orange">
-                <BadgeCheck size={18} />
-              </div>
-            </div>
-            <p className="dash-card-value">Pending</p>
-            <span className="dash-card-sub">Identity not verified yet</span>
+            <p className="dash-card-value">--</p>
+
+            <span className="dash-card-sub">
+              No buyer reviews yet
+            </span>
           </div>
 
           <div className="dash-card">

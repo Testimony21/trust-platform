@@ -5,6 +5,8 @@ import OnboardingModal from "../../components/OnboardingModal/OnboardingModal";
 import { useNavigate } from "react-router-dom";
 import DashboardLoader from "../../components/DashboardLoader/DashboardLoader";
 import { useEffect, useState } from "react";
+import VerificationStatus from "./VerificationStatus/VerificationStatus";
+import AdminVerificationPanel from "../../components/admin/AdminVerificationPanel";
 
 export default function DashboardRouter() {
   const { user, loading } = useAuth();
@@ -48,7 +50,8 @@ useEffect(() => {
 
       {user.role === "buyer" && <BuyerDashboard />}
       {user.role === "seller" && <SellerDashboard />}
-      {user.role !== "buyer" && user.role !== "seller" && (
+      {user.role === "admin" && <AdminVerificationPanel />}
+      {user.role !== "buyer" && user.role !== "seller" && user.role !== "admin" && (
         <p style={{ color: "white", padding: "40px" }}>Unknown role</p>
       )}
     </>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import logo from "../../assets/images/new-logo.png";  
+import logo from "../../assets/images/new-logo.png";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -15,16 +15,25 @@ export default function Navbar() {
       <nav>
         {user ? (
           <>
-            <Link to="/dashboard" className="btn ghost">Dashboard</Link>
+            <Link to="/dashboard" className="btn ghost">
+              Dashboard
+            </Link>
+
+            <Link to="/deals" className="btn ghost">
+              Transactions
+            </Link>
           </>
         ) : (
           <>
-            <Link to="/login" className="btn ghost">Login</Link>
+            <Link to="/deals" className="btn ghost">
+              Transactions
+            </Link>
+
+            <Link to="/login" className="btn ghost">
+              Login
+            </Link>
           </>
         )}
-        <Link to="/verify-seller" className="btn solid">Verify a Seller</Link>
-
-        <Link to="/deals" className="btn ghost">Transactions</Link>
       </nav>
     </header>
   );

@@ -1,10 +1,13 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import DashboardLoader from "../DashboardLoader/DashboardLoader";
 
 export default function ProtectedRoute({ children }) {
-  const { isAuthenticated, loading } = useAuth();
+  const { user, loading } = useAuth();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return <DashboardLoader />;
+  }
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return user ? children : <Navigate to="/login" replace />;
 }

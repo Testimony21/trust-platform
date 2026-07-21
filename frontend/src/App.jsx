@@ -12,13 +12,24 @@ import GetVerified from "./pages/GetVerified/GetVerified";
 import Navbar from "./components/Navbar/Navbar";
 import Deals from "./pages/Deals/Deals";
 import DealRoom from "./pages/DealRoom/DealRoom";
-// import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoutes";
-
+import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoutes";
+import VerificationStatus from "./pages/Dashboard/VerificationStatus/VerificationStatus";
+import AdminDashboard from "./components/admin/AdminVerificationPanel";
+import AdminRoute from "./components/routing/AdminRoute";
+import AdminVerificationPanel from "./components/admin/AdminVerificationPanel";
 
 
 function Layout() {
   const location = useLocation();
-  const hideNavbar = ["/login", "/register", "/dashboard", "/deals"].includes(location.pathname);
+  
+  // FIXED: Changed to .startsWith() so the Navbar stays hidden on any sub-routes under /admin or /dashboard
+  const hideNavbar = [
+    "/login", 
+    "/register"
+  ].includes(location.pathname) || 
+  location.pathname.startsWith("/dashboard") || 
+  location.pathname.startsWith("/deals") || 
+  location.pathname.startsWith("/admin");
 
   return (
     <>
@@ -32,10 +43,23 @@ function Layout() {
         <Route path="/register" element={<Register />} />
         <Route path="/get-verified" element={<GetVerified />} />
 
-        {/* Private Pages */}
+        {/* Private User/Seller Pages */}
         <Route path="/dashboard" element={<DashboardRouter />} />
         <Route path="/deals" element={<Deals />} />
         <Route path="/deals/:id" element={<DealRoom />} />
+        <Route
+          path="/dashboard/verification"
+          element={
+            <ProtectedRoute>
+              <VerificationStatus />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* FIXED: Swapped out ProtectedRoute wrapper for your nested AdminRoute gate component */}
+        <Route element={<AdminRoute />}>
+          <Route path="/admin" element={<AdminVerificationPanel />} />
+        </Route>
 
         {/* 404 */}
         {/* <Route path="*" element={<NotFound />} /> */}
@@ -47,8 +71,8 @@ function Layout() {
 
 export default function App() {
   return (
-      <BrowserRouter>
-        <Layout />
-      </BrowserRouter>
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
   );
 }

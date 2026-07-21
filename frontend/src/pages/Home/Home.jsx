@@ -5,15 +5,22 @@ import HowItWorks from "../../components/HowItWorks/HowItWorks";
 import WhyTrust from "../../components/WhyTrust/WhyTrust";
 import Footer from "../../components/Footer/Footer";
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Home() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSearch = () => {
-    if (query.trim()) {
-      navigate(`/verify-seller?q=${encodeURIComponent(query.trim())}`);
+    if (!query.trim()) return;
+
+    if (!user) {
+      // Redirect to login with query as a search param
+      navigate("/deals");
+      return; 
     }
+      navigate(`/verify-seller?q=${encodeURIComponent(query.trim())}`);
   };
 
   const handleKeyDown = (e) => {
@@ -54,9 +61,9 @@ export default function Home() {
           </div>
 
           {/* Keep secondary CTA below */}
-          <div className="cta">
+          {/* <div className="cta">
             <Link to="/get-verified" className="secondary">Get Verified as a Seller</Link>
-          </div>
+          </div> */}
 
           {/* <div className="stats">
             <div>

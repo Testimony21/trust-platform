@@ -14,14 +14,24 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Helper utility to pivot dashboard targets based on account status parameters
+  const routeUserByRole = (authPayload) => {
+    // FIXED: Adjusted to extract the nested user object parameter from your context API payload wrapper
+    if (authPayload?.user?.role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
       setError("");
 
-      await login(email, password);
-      navigate("/dashboard");
+      const authData = await login(email, password);
+      routeUserByRole(authData);
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
@@ -34,9 +44,8 @@ export default function Login() {
       setLoading(true);
       setError("");
 
-      await loginWithGoogle(credentialResponse.credential);
-
-      navigate("/dashboard");
+      const authData = await loginWithGoogle(credentialResponse.credential);
+      routeUserByRole(authData);
     } catch (err) {
       setError(err.response?.data?.message || "Google login failed");
     } finally {
