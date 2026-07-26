@@ -4,11 +4,21 @@ const userSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  phone: { type: String },  
+  phone: { type: String },
   role: {
     type: String,
     enum: ["buyer", "seller", "both", "admin"],
     default: "buyer"
+  },
+ 
+  verificationStatus: {
+    type: String,
+    enum: ["Not Submitted", "Pending Review", "Approved", "Rejected"],
+    default: "Not Submitted"
+  },
+  verificationAdminNotes: {
+    type: String,
+    default: ""
   },
 
   isAdmin: {

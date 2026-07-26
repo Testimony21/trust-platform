@@ -4,7 +4,6 @@ const User = require("../models/User");
 const protect = async (req, res, next) => {
   let token;
 
-  // Check if token exists in headers
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -22,7 +21,9 @@ const protect = async (req, res, next) => {
         return res.status(401).json({ message: "User not found" });
       }
 
-      next();
+      // 🎯 FORCE RETURN: This ensures the promise stops and moves to Multer cleanly
+      return next(); 
+      
     } catch (error) {
       return res.status(401).json({ message: "Not authorized, token failed" });
     }

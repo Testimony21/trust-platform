@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const Verification = require('../models/verification');
-// const { uploadToCloudinary } = require('../utils/cloudinaryStorage'); // Mocked utility helper
-// const { protectRoute } = require('../middleware/authMiddleware'); // Mocked user validation session
+const Protect = require('../middleware/authMiddleware');
+const User = require('../models/User');
 
-// Configure Multer storage engine in memory before cloud bucket pipe dispatch
 const storage = multer.memoryStorage();
 const upload = multer({ 
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit guard
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, 
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
       cb(null, true);
@@ -23,52 +23,67 @@ const upload = multer({
  * @desc    Submit user KYC documents and registration info
  * @access  Private (Requires User Session Auth)
  */
-router.post('/submit', upload.single('idFile'), async (req, res) => {
+// 🎯 PASS THEM AS A CLEAN SEQUENTIAL ARRAY STACK WRAPPER:
+router.post('/submit', Protect, (req, res, next) => {
+  upload.single('idFile')(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ message: `File upload error: ${err.message}` });
+    } else if (err) {
+      return res.status(400).json({ message: err.message });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     const { fullName, idType, phoneNumber } = req.body;
-    
-    // 1. Validation Guards
+
     if (!fullName || !idType || !phoneNumber || !req.file) {
-      return res.status(400).json({ message: 'All credential items and data arrays are required.' });
+      return res.status(400).json({ message: 'All fields and document are required.' });
     }
 
-    // 2. Check if a document application already exists for this user session
-    // const userId = req.user.id; // Pulled dynamically from your auth session tokens
-    const userId = "65f1234567890abcdef12345"; // Static string placeholder for sandboxed compilation
-    
+    const userId = req.user.id;
+
     const existingSubmission = await Verification.findOne({ userId });
-    if (existingSubmission && existingSubmission.status === 'Pending') {
-      return res.status(400).json({ message: 'You already have an active document profile under admin audit.' });
+
+    if (existingSubmission && existingSubmission.status === 'Pending Review') {
+      return res.status(400).json({ message: 'You already have a pending verification submission.' });
     }
 
-    /* 
-    3. DISPATCH IMAGE TO CLOUD STORAGE (S3 / Cloudinary)
-    In a live production state, you would extract the file buffer array and push to Cloudinary:
-    const uploadResult = await uploadToCloudinary(req.file.buffer);
-    const idDocUrl = uploadResult.secure_url;
-    */
-    const idDocUrl = `https://res.cloudinary.com/trust-platform/image/upload/mock_id_${Date.now()}.png`; // Sandboxed response placeholder
+    const idDocUrl = `https://res.cloudinary.com/trust-platform/image/upload/mock_id_${Date.now()}.png`;
 
-    // 4. Save Submission to MongoDB Atlas
-    const verificationPayload = new Verification({
-      userId,
-      fullName,
-      idType,
-      idDocUrl,
-      phoneNumber,
-      phoneVerified: true // Set to true after SMS OTP step handshake matches successfully
+    if (existingSubmission) {
+      existingSubmission.status = 'Pending Review';
+      existingSubmission.fullName = fullName;
+      existingSubmission.idType = idType;
+      existingSubmission.idDocUrl = idDocUrl;
+      existingSubmission.phoneNumber = phoneNumber;
+      existingSubmission.rejectionReason = '';
+      await existingSubmission.save();
+    } else {
+      await Verification.create({
+        userId,
+        fullName,
+        idType,
+        idDocUrl,
+        phoneNumber,
+        phoneVerified: true,
+        status: 'Pending Review'
+      });
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      verificationStatus: 'Pending Review',
+      verificationAdminNotes: ''
     });
 
-    await verificationPayload.save();
-
-    res.status(201).json({ 
-      success: true, 
-      message: 'Verification metrics queued successfully for administrative compliance audit.' 
+    return res.status(201).json({
+      success: true,
+      message: 'Verification submitted successfully.'
     });
 
   } catch (error) {
-    console.error('KYC Ingestion Engine Fault:', error.message);
-    res.status(500).json({ message: 'Internal Server error processing file upload matrices.' });
+    console.error('Verification error:', error.message);
+    return res.status(500).json({ message: error.message });
   }
 });
 

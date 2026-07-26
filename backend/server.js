@@ -36,6 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/seller", sellerRoutes);
 app.use("/api/buyer", buyerRoutes);
 app.use("/api/deals", dealRoutes);
+app.use("/api/users", userRoutes); 
 app.use("/api/verification", verificationRoutes);
 app.use("/api/admin/verification", adminRoutes);
 

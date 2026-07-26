@@ -3,7 +3,8 @@ const router = express.Router();
 const Verification = require('../models/verification');
 const Protect = require('../middleware/authMiddleware');
 const adminProtect = require('../middleware/adminMiddleware');
-const User = require('../models/User'); // Un-commented to update the user's role on approval
+const User = require('../models/User');
+const SellerProfile = require('../models/SellerProfile');
 
 /**
  * @route   GET /api/admin/verification/pending
@@ -12,67 +13,103 @@ const User = require('../models/User'); // Un-commented to update the user's rol
  */
 router.get('/pending', Protect, adminProtect, async (req, res) => {
   try {
-    const pendingApplications = await Verification.find({ status: 'Pending' })
+    // 1. Fetching all records explicitly flagged as 'Pending Review'
+    const pendingApplications = await Verification.find({ status: 'Pending Review' })
       .populate('userId', 'email fullName')
       .sort({ submittedAt: 1 });
 
-    res.status(200).json({
+    // 2. Return clean JSON structure matching dashboard UI expectations
+    return res.status(200).json({
       success: true,
       count: pendingApplications.length,
       data: pendingApplications
     });
   } catch (error) {
     console.error('Admin Fetch Queue Error:', error.message);
-    res.status(500).json({ message: 'Server error pulling pending verification metrics.' });
+    return res.status(500).json({ 
+      success: false,
+      message: 'Server error pulling pending verification metrics.' 
+    });
   }
 });
 
 /**
  * @route   PATCH /api/admin/verification/review/:id
  * @desc    Approve or Reject a specific user's verification profile
- * @access  Private (Admin Only) <-- FIXED: Added protection middleware below
+ * @access  Private (Admin Only)
  */
 router.patch('/review/:id', Protect, adminProtect, async (req, res) => {
   try {
-    // FIXED: Destructured 'action' and 'reason' to match your endpoint design
-    const { action, reason } = req.body; 
-    const applicationIds = req.params.id;
+    const { action, reason } = req.body;
+    const applicationId = req.params.id;
 
-    // 1. Validate Admin Input Action parameters
+    // 1. Validate Input
     if (!['Approved', 'Rejected'].includes(action)) {
-      return res.status(400).json({ message: 'Invalid administrative action payload. Must be Approved or Rejected.' });
+      return res.status(400).json({ 
+        success: false,
+        message: 'Invalid administrative action payload. Must be Approved or Rejected.' 
+      });
     }
 
     if (action === 'Rejected' && (!reason || !reason.trim())) {
-      return res.status(400).json({ message: 'A specific reason string is required to reject an application.' });
+      return res.status(400).json({ 
+        success: false,
+        message: 'A specific reason string is required to reject an application.' 
+      });
     }
 
-    // 2. Find the target verification record
-    const application = await Verification.findById(applicationIds);
+    // 2. Find target verification application record
+    const application = await Verification.findById(applicationId);
     if (!application) {
-      return res.status(404).json({ message: 'Verification profile application record not found.' });
+      return res.status(404).json({ 
+        success: false,
+        message: 'Verification profile application record not found.' 
+      });
     }
 
-    if (application.status !== 'Pending') {
-      return res.status(400).json({ message: 'This application has already been processed.' });
+    // Aligned check with your true verification process string 'Pending Review'
+    if (application.status !== 'Pending Review') {
+      return res.status(400).json({ 
+        success: false,
+        message: 'This application has already been processed.' 
+      });
     }
 
-    // 3. Update execution state based on action parameters
+    // 3. Sync changes atomically to User and Seller collections
     if (action === 'Approved') {
       application.status = 'Approved';
-      application.rejectionReason = ''; // Clear out historical notes
+      application.rejectionReason = '';
+      await application.save();
 
-      // Dynamically upgrade their role profile to a seller on approval
-      await User.findByIdAndUpdate(application.userId, { role: 'seller' });
+      // Update basic user role capabilities for login payloads and dashboard barriers
+      await User.findByIdAndUpdate(application.userId, {
+        role: 'seller',
+        verificationStatus: 'Approved',
+        verificationAdminNotes: ''
+      });
+
+      // Maintain application sync inside the dedicated profile cluster
+      await SellerProfile.findOneAndUpdate(
+        { userId: application.userId },
+        { isVerified: true },
+        { upsert: true, new: true }
+      );
+      
     } else {
+      // Rejection execution branch
       application.status = 'Rejected';
       application.rejectionReason = reason.trim();
+      await application.save();
+
+      // Flag user layout accurately to show denial indicators on frontend refresh
+      await User.findByIdAndUpdate(application.userId, {
+        verificationStatus: 'Rejected',
+        verificationAdminNotes: reason.trim()
+      });
     }
 
-    // Save changes to trigger updates
-    await application.save();
-
-    res.status(200).json({
+    // 4. Send successful termination response
+    return res.status(200).json({
       success: true,
       message: `User application status updated to ${action} successfully.`,
       data: application
@@ -80,7 +117,10 @@ router.patch('/review/:id', Protect, adminProtect, async (req, res) => {
 
   } catch (error) {
     console.error('Admin Processing Engine Fault:', error.message);
-    res.status(500).json({ message: 'Internal Server Error modifying verification state.' });
+    return res.status(500).json({ 
+      success: false,
+      message: 'Internal Server Error modifying verification state.' 
+    });
   }
 });
 

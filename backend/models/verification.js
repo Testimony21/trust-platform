@@ -5,7 +5,7 @@ const VerificationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-    unique: true // Prevents spamming multiple pending applications
+    unique: true
   },
   fullName: {
     type: String,
@@ -14,12 +14,12 @@ const VerificationSchema = new mongoose.Schema({
   },
   idType: {
     type: String,
-    enum: ['passport', 'drivers_license', 'national_id'],
+    enum: ['Passport', 'Drivers License', 'National ID'],
     required: true
   },
   idDocUrl: {
     type: String,
-    required: true // The absolute security link from Cloudinary or AWS S3
+    required: true
   },
   phoneNumber: {
     type: String,
@@ -32,27 +32,13 @@ const VerificationSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Pending', 'Approved', 'Rejected'],
-    default: 'Pending'
+    enum: ["Not Submitted", "Pending Review", "Approved", "Rejected"],
+    default: "Pending Review"
   },
   rejectionReason: {
     type: String,
     default: ''
-  },
-  submittedAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
   }
-});
-
-// Auto-update the timestamp on state shifts
-VerificationSchema.pre('save', function(next) {
-  this.updatedAt = Date.now();
-  next();
-});
+}, { timestamps: true }); // ← handles createdAt and updatedAt automatically
 
 module.exports = mongoose.model('Verification', VerificationSchema);
