@@ -350,6 +350,108 @@
   margin-top: 8px;
 }
 
+/* File Upload Container UI Adjustments */
+.file-upload-zone {
+  margin-top: 6px;
+}
+
+.file-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  border: 2px dashed #b26cff; /* Primary brand color theme match */
+  background: rgba(178, 108, 255, 0.04);
+  border-radius: 8px;
+  cursor: pointer;
+  color: #cbd5e1;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.file-upload-label:hover {
+  background: rgba(178, 108, 255, 0.08);
+  border-color: #c084fc;
+}
+
+.file-upload-label svg {
+  color: #b26cff;
+}
+
+/* Dropdown select configurations */
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #f8fafc;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.form-group select:focus {
+  border-color: #b26cff;
+}
+
+/* Custom Warning Layout boxes */
+.resubmission-notice {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: #fde68a;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+}
+
+.verify-processing-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.verify-processing-state h3 {
+  margin: 16px 0 8px;
+  color: #f8fafc;
+}
+
+.verify-processing-state p {
+  color: #94a3b8;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.verify-dashboard-btn {
+  background: #b26cff;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+
+.verify-dashboard-btn:hover {
+  opacity: 0.9;
+}
+
+.secondary-btn {
+  background: #334155;
+}
+
+.rejection-reason-box {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
 /* ==========================================
    GLOBAL ENTRY KEYFRAMES
    ========================================== */

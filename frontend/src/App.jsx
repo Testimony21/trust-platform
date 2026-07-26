@@ -50,9 +50,7 @@ function Layout() {
         <Route
           path="/dashboard/verification"
           element={
-            <ProtectedRoute>
-              <VerificationStatus />
-            </ProtectedRoute>
+            <GetVerified />
           }
         />
 

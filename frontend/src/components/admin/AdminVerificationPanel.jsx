@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { ShieldCheck, LogOut, LayoutDashboard, Check, X, ShieldAlert, FileText, ExternalLink, RefreshCw, UserCheck } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate to redirect after logout
-import { useAuth } from "../../context/AuthContext"; // Import your auth hook
+import { Link, useNavigate } from "react-router-dom"; 
+import { useAuth } from "../../context/AuthContext"; 
 import logo from "../../assets/images/new-logo.png";
 import "./AdminVerification.css";
 
 export default function AdminVerificationPanel() {
-  const { logout } = useAuth(); // Grab the logout handler
+  // Pull token directly from AuthContext to guarantee synchronized session headers
+  const { logout, token } = useAuth(); 
   const navigate = useNavigate();
   
   const [applications, setApplications] = useState([]);
@@ -16,24 +17,38 @@ export default function AdminVerificationPanel() {
   const [showRejectInput, setShowRejectInput] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
-  // Fetch all pending requests from the backend
+  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const fetchPendingQueue = async () => {
+    // Fallback safeguard if context hasn't populated the token yet
+    const activeToken = token || localStorage.getItem("token");
+    
+    if (!activeToken) {
+      console.error("No authorization token present in context or local storage.");
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/admin/verification/pending", {
+      const response = await fetch(`${API_BASE}/api/admin/verification/pending`, {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${activeToken}`,
           "Content-Type": "application/json"
         }
       });
+      
+      if (response.status === 403) {
+        throw new Error("403 Forbidden: Active account lacks administrative role privileges.");
+      }
+
       const result = await response.json();
       if (result.success) {
         setApplications(result.data);
         setSelectedApp(result.data[0] || null);
       }
     } catch (err) {
-      console.error("Failed fetching KYC queue:", err);
+      console.error("Failed fetching KYC queue:", err.message);
     } finally {
       setLoading(false);
     }
@@ -41,7 +56,7 @@ export default function AdminVerificationPanel() {
 
   useEffect(() => {
     fetchPendingQueue();
-  }, []);
+  }, [token]); // Re-run if token finishes loading asynchronously
 
   const handleReviewAction = async (finalStatus) => {
     if (finalStatus === "Rejected" && !rejectionReason.trim()) {
@@ -49,13 +64,13 @@ export default function AdminVerificationPanel() {
       return;
     }
 
+    const activeToken = token || localStorage.getItem("token");
     setActionLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`/api/admin/verification/review/${selectedApp._id}`, {
+      const response = await fetch(`${API_BASE}/api/admin/verification/review/${selectedApp._id}`, {
         method: "PATCH",
         headers: { 
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${activeToken}`,
           "Content-Type": "application/json" 
         },
         body: JSON.stringify({
@@ -79,7 +94,6 @@ export default function AdminVerificationPanel() {
     }
   };
 
-  // Handle logging out safely
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -96,10 +110,7 @@ export default function AdminVerificationPanel() {
 
   return (
     <div className="admin-verif-container">
-      {/* LEFT COLUMN: PENDING USER QUEUE ROW SELECTOR */}
       <div className="admin-verif-sidebar">
-        
-        {/* Brand Identity Header & Home Link Escape Route */}
         <div className="admin-sidebar-header">
           <Link to="/" className="admin-logo-wrapper" aria-label="Go back to Home">
             <img src={logo} alt="Trust-Platform Logo" className="admin-mini-logo" />
@@ -135,7 +146,6 @@ export default function AdminVerificationPanel() {
           )}
         </div>
 
-        {/* UPDATED: Sidebar Footer with working Navigation & Logout Actions */}
         <div className="admin-sidebar-footer">
           <Link to="/dashboard" className="admin-dashboard-btn">
             <LayoutDashboard size={16} /> Standard Dashboard
@@ -146,7 +156,6 @@ export default function AdminVerificationPanel() {
         </div>
       </div>
 
-      {/* RIGHT COLUMN: CORE WORKSPACE & DOCUMENT VIEWER */}
       <div className="admin-verif-workspace">
         {selectedApp ? (
           <div className="workspace-grid">

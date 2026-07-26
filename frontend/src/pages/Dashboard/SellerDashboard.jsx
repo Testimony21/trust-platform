@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../../assets/images/bg-logo.png";
@@ -17,8 +18,33 @@ import {
 import "./SellerDashboard.css";
 
 export default function SellerDashboard() {
-  const { user, logout, loading: authLoading } = useAuth();
+  // Pull fields and sync utilities from Auth Context
+  const { user, logout, loading: authLoading, refreshUser } = useAuth();
   const navigate = useNavigate();
+
+  // Automatically fetch fresh user context data when dashboard mounts
+  useEffect(() => {
+    if (user) {
+      refreshUser();
+    }
+  }, [refreshUser]);
+
+  // Helper definition using safe navigation operators
+  const getVerificationDisplay = () => {
+    switch (user?.verificationStatus) {
+      case "Approved":
+        return { label: "Verified", color: "var(--success)", icon: <ShieldCheck size={16} /> };
+      case "Pending Review":
+        return { label: "In Review", color: "#f59e0b", icon: <Clock size={16} /> };
+      case "Rejected":
+        return { label: "Verification Rejected", color: "var(--danger)", icon: <AlertTriangle size={16} /> };
+      default:
+        return { label: "Not Verified", color: "#64748b", icon: <BadgeCheck size={16} /> };
+    }
+  };
+
+  // Invoke helper layout configuration once loading states settle
+  const verificationDisplay = getVerificationDisplay();
 
   if (authLoading) {
     return <DashboardLoader />;
@@ -37,26 +63,30 @@ export default function SellerDashboard() {
     navigate("/");
   };
 
-const checklistItems = [
-  {
-    done: !!user.fullName && !!user.phone,
-    label: "Complete your profile",
-    link: "/dashboard/profile",
-    linkText: "Complete Profile →",
-  },
-  {
-    done: false,
-    label: "Complete your first transaction",
-    link: "/dashboard/transactions",
-    linkText: "View Transactions →",
-  },
-  {
-    done: false,
-    label: "Receive your first buyer review",
-    link: "/dashboard/reviews",
-    linkText: "Learn More →",
-  },
-];
+  const checklistItems = [
+    {
+      done: !!user.fullName && !!user.phone,
+      label: "Complete your profile",
+      link: "/dashboard/profile",
+      linkText: "Complete Profile →",
+    },
+    {
+      done: user.verificationStatus === "Approved",
+      label: "Get verified",
+      link: "/dashboard/verification", // Fixed path from /GetVerified to match routing architecture
+      linkText: user.verificationStatus === "Pending Review" 
+        ? "In review..." 
+        : user.verificationStatus === "Rejected"
+        ? "Resubmit application →"
+        : "Start Verification →",
+    },
+    {
+      done: false,
+      label: "Complete your first transaction",
+      link: "/dashboard/transactions",
+      linkText: "View Transactions →",
+    },
+  ];
 
   const allDone = checklistItems.every((item) => item.done);
   const doneCount = checklistItems.filter((i) => i.done).length;
@@ -81,11 +111,9 @@ const checklistItems = [
             <Link to="/dashboard/verification" className="dash-nav-item">
               <BadgeCheck size={18} /> Verification Status
             </Link>
-
             <Link to="/dashboard/transactions" className="dash-nav-item">
               <ShieldCheck size={18} /> Transactions
             </Link>
-
             <Link to="/dashboard/reviews" className="dash-nav-item">
               <Star size={18} /> Reviews
             </Link>
@@ -100,19 +128,49 @@ const checklistItems = [
         </button>
       </aside>
 
-      {/* MAIN */}
+      {/* MAIN CONTENT */}
       <main className="dash-main">
 
         {/* TOPBAR */}
         <div className="dash-topbar">
           <div>
             <h1>Overview</h1>
-            <p className="dash-date">
+            <div className="dash-date">
+              {user.verificationStatus === "Pending Review" && (
+                <div className="status-banner banner-pending">
+                  <Clock size={18} />
+                  <div>
+                    <strong>Application Under Review</strong>
+                    <p>Our compliance team is verifying your details. You will be notified once complete.</p>
+                  </div>
+                </div>
+              )}
+
+              {user.verificationStatus === "Approved" && (
+                <div className="status-banner banner-approved">
+                  <ShieldCheck size={18} />
+                  <div>
+                    <strong>Account Fully Verified</strong>
+                    <p>Your Trust Badge is now active on payment checkouts and lookups!</p>
+                  </div>
+                </div>
+              )}
+
+              {user.verificationStatus === "Rejected" && (
+                <div className="status-banner banner-rejected">
+                  <AlertTriangle size={18} />
+                  <div>
+                    <strong>Verification Request Refused</strong>
+                    <p>Reason: {user.verificationAdminNotes || "Documentation did not meet verification criteria."}</p>
+                    <Link to="/dashboard/verification" className="banner-action-btn">Re-submit Application</Link>
+                  </div>
+                </div>
+              )}
               {new Date().toLocaleDateString("en-GB", {
                 weekday: "long", day: "numeric",
                 month: "long", year: "numeric"
               })}
-            </p>
+            </div>
           </div>
 
           <div className="dash-user">
@@ -124,50 +182,53 @@ const checklistItems = [
           </div>
         </div>
 
-        {/* ALERT */}
+        {/* INFO ALERT */}
         <div className="dash-alert">
           <AlertTriangle size={17} />
-
           <span>
             Your trust score is earned through successful transactions and buyer reviews.
             Complete your profile so buyers know who they're dealing with.
           </span>
         </div>
 
-        {/* STAT CARDS */}
-        <div className="dash-cards">
-          <div className="dash-card">
-            <div className="dash-card-top">
-              <span className="dash-card-label">Buyer Rating</span>
-
-              <div className="dash-card-icon orange">
-                <Star size={18} />
-              </div>
+        {/* STAT METRICS CARD */}
+        <div className="dash-card">
+          <div className="dash-card-top">
+            <span className="dash-card-label">Verification</span>
+            <div className="dash-card-icon orange">
+              <BadgeCheck size={18} />
             </div>
-
-            <p className="dash-card-value">--</p>
-
-            <span className="dash-card-sub">
-              No buyer reviews yet
-            </span>
           </div>
-
-          <div className="dash-card">
-            <div className="dash-card-top">
-              <span className="dash-card-label">Total Deals</span>
-              <div className="dash-card-icon green">
-                <CheckCircle2 size={18} />
-              </div>
-            </div>
-            <p className="dash-card-value">0</p>
-            <span className="dash-card-sub">No completed deals yet</span>
+          <div className="dash-card-value" style={{
+            fontSize: "1.2rem",
+            color: verificationDisplay.color,
+            display: "flex",
+            alignItems: "center",
+            gap: "8px"
+          }}>
+            {verificationDisplay.icon}
+            {verificationDisplay.label}
           </div>
+          <span className="dash-card-sub">
+            {user.verificationStatus === "Not Submitted" && (
+              <Link to="/dashboard/verification" style={{ color: "var(--primary-light)" }}>
+                Start verification →
+              </Link>
+            )}
+            {user.verificationStatus === "Pending Review" && "Under admin review"}
+            {user.verificationStatus === "Approved" && "Identity confirmed"}
+            {user.verificationStatus === "Rejected" && (
+              <Link to="/dashboard/verification" style={{ color: "var(--danger)" }}>
+                Resubmit application →
+              </Link>
+            )}
+          </span>
         </div>
 
-        {/* BOTTOM GRID */}
+        {/* BOTTOM CONTENT GRID */}
         <div className="dash-bottom">
 
-          {/* ACTIVITY */}
+          {/* HISTORICAL ACTIVITY FEED */}
           <div className="dash-section">
             <h2>Account activity</h2>
             <div className="dash-activity">
@@ -189,7 +250,7 @@ const checklistItems = [
             </div>
           </div>
 
-          {/* ONBOARDING CHECKLIST */}
+          {/* PROGRESS CHECKLIST ACTIONABLE INTERFACE */}
           {!allDone && (
             <div className="dash-section">
               <div className="checklist-header">

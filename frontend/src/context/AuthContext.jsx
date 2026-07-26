@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -8,32 +8,35 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+const refreshUser = useCallback(async () => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        setUser(res.data.user);
+        setUser(res.data.user || res.data);
       } catch (err) {
-        console.log(err);
+        console.log("Auth sync error:", err);
         setToken(null);
+        setUser(null);
         localStorage.removeItem("token");
-      }
+      }finally {
 
       setLoading(false);
     };
 
-    fetchUser();
   }, [token]);
+
+  useEffect(() => {
+    refreshUser();
+  }, [refreshUser]);
 
   const login = async (email, password) => {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
@@ -75,6 +78,7 @@ export const AuthProvider = ({ children }) => {
         loginWithGoogle,
         logout,
         loading,
+        refreshUser,
       }}
     >
       {children}
