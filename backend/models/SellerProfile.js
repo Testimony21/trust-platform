@@ -44,6 +44,16 @@ const sellerProfileSchema = new mongoose.Schema({
     default: 0
   },
 
+  averageRating: {
+    type: Number,
+    default: 0
+  },
+
+  reviewCount: {
+    type: Number,
+    default: 0
+  },
+
   successfulDeals: {
     type: Number,
     default: 0

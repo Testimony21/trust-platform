@@ -14,8 +14,11 @@ const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
 const verificationRoutes = require("./routes/verificationRoutes");
 const adminRoutes = require("./routes/adminVerificationRoutes");
-
+const reviewRoutes = require("./routes/reviewRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 const Message = require("./models/Message"); // <-- create a Message model
+
+
 
 dotenv.config();
 connectDB();
@@ -36,10 +39,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/seller", sellerRoutes);
 app.use("/api/buyer", buyerRoutes);
 app.use("/api/deals", dealRoutes);
-app.use("/api/users", userRoutes); 
+app.use("/api/users", userRoutes);
 app.use("/api/verification", verificationRoutes);
 app.use("/api/admin/verification", adminRoutes);
-
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/notifications", notificationRoutes);
 app.get("/", (req, res) => {
   res.send("Trust Platform API Running");
 });
@@ -73,6 +77,7 @@ app.set("io", io); // Make io accessible in routes
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.user?.id);
+  socket.join(socket.user.id);
 
   socket.on("joinDeal", (dealId) => {
     socket.join(dealId);

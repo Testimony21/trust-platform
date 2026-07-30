@@ -14,7 +14,7 @@ const getIdString = (value) => {
 };
 
 const isDealMember = (deal, userId) => {
-  if (!deal || !userId || !deal.buyer || !deal.seller) return false;
+  if (!deal || !userId) return false;
 
   return (
     getIdString(deal.buyer) === userId.toString() ||
@@ -22,58 +22,72 @@ const isDealMember = (deal, userId) => {
   );
 };
 
+/* ======================================================
+   CREATE DEAL
+====================================================== */
+
 router.post("/", protect, async (req, res) => {
   try {
     const userId = getUserId(req);
-    const { sellerId, title, amount, platform } = req.body;
 
-    if (!userId) {
-      return res.status(401).json({ message: "Not logged in" });
-    }
+    const {
+      sellerId,
+      title,
+      description,
+      amount,
+      platform,
+    } = req.body;
 
     if (!sellerId || !title) {
-      return res.status(400).json({ message: "Seller and title are required" });
+      return res.status(400).json({
+        message: "Seller and title are required.",
+      });
     }
 
     if (sellerId.toString() === userId.toString()) {
       return res.status(400).json({
-        message: "You cannot start a transaction with yourself",
+        message: "You cannot start a transaction with yourself.",
       });
     }
 
-    // Check if a deal already exists between this buyer and seller
     const existingDeal = await Deal.findOne({
       buyer: userId,
       seller: sellerId,
-      status: { $nin: ["completed", "cancelled"] }, // allow new deal if old one is done
+      status: {
+        $nin: ["Completed", "Cancelled"],
+      },
     });
 
     if (existingDeal) {
-      return res.status(200).json(existingDeal); // return the existing one instead
+      return res.json(existingDeal);
     }
 
     const deal = await Deal.create({
       buyer: userId,
       seller: sellerId,
       title,
+      description,
       amount,
       platform,
+      status: "Pending",
     });
 
     res.status(201).json(deal);
   } catch (err) {
-    console.log("CREATE DEAL ERROR:", err);
-    res.status(500).json({ message: "Failed to create transaction" });
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to create transaction.",
+    });
   }
 });
+
+/* ======================================================
+   GET USER DEALS
+====================================================== */
 
 router.get("/", protect, async (req, res) => {
   try {
     const userId = getUserId(req);
-
-    if (!userId) {
-      return res.status(401).json({ message: "Not logged in" });
-    }
 
     const deals = await Deal.find({
       $or: [{ buyer: userId }, { seller: userId }],
@@ -85,159 +99,268 @@ router.get("/", protect, async (req, res) => {
 
     res.json(deals);
   } catch (err) {
-    console.log("FETCH DEALS ERROR:", err);
-    res.status(500).json({ message: "Failed to fetch transactions" });
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to fetch transactions.",
+    });
   }
 });
+
+/* ======================================================
+   GET SINGLE DEAL
+====================================================== */
 
 router.get("/:id", protect, async (req, res) => {
   try {
     const userId = getUserId(req);
-
-    if (!userId) {
-      return res.status(401).json({ message: "Not logged in" });
-    }
 
     const deal = await Deal.findById(req.params.id)
       .populate("buyer", "fullName email role")
       .populate("seller", "fullName email role");
 
     if (!deal) {
-      return res.status(404).json({ message: "Transaction not found" });
+      return res.status(404).json({
+        message: "Transaction not found.",
+      });
     }
 
     if (!isDealMember(deal, userId)) {
-      return res.status(403).json({ message: "Not allowed" });
+      return res.status(403).json({
+        message: "Not allowed.",
+      });
     }
 
     res.json(deal);
   } catch (err) {
-    console.log("FETCH DEAL ERROR:", err);
-    res.status(500).json({ message: "Failed to fetch transaction" });
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to fetch transaction.",
+    });
   }
 });
 
-router.patch("/:id/status", protect, async (req, res) => {
+/* ======================================================
+   SELLER ACCEPTS DEAL
+====================================================== */
+
+router.patch("/:id/accept", protect, async (req, res) => {
   try {
     const userId = getUserId(req);
-    const { status } = req.body;
-
-    if (!userId) {
-      return res.status(401).json({ message: "Not logged in" });
-    }
-
-    const allowedStatuses = [
-      "pending",
-      "accepted",
-      "payment_sent",
-      "delivered",
-      "completed",
-      "cancelled",
-      "disputed",
-    ];
-
-    if (!allowedStatuses.includes(status)) {
-      return res.status(400).json({ message: "Invalid transaction status" });
-    }
 
     const deal = await Deal.findById(req.params.id);
 
     if (!deal) {
-      return res.status(404).json({ message: "Transaction not found" });
-    }
-
-    if (!isDealMember(deal, userId)) {
-      return res.status(403).json({ message: "Not allowed" });
-    }
-
-    const buyerId = getIdString(deal.buyer);
-    const sellerId = getIdString(deal.seller);
-    const currentUserId = userId.toString();
-
-    if (status === "delivered" && sellerId !== currentUserId) {
-      return res.status(403).json({ message: "Only seller can mark delivered" });
-    }
-
-    if (status === "completed" && buyerId !== currentUserId) {
-      return res.status(403).json({
-        message: "Only buyer can complete transaction",
+      return res.status(404).json({
+        message: "Transaction not found.",
       });
     }
 
-    deal.status = status;
-
-    if (status === "delivered") {
-      deal.sellerConfirmed = true;
+    if (getIdString(deal.seller) !== userId.toString()) {
+      return res.status(403).json({
+        message: "Only the seller can accept this transaction.",
+      });
     }
 
-    if (status === "completed") {
+    if (deal.status !== "Pending") {
+      return res.status(400).json({
+        message: "Transaction has already been processed.",
+      });
+    }
+
+    deal.status = "Active";
+    deal.acceptedAt = new Date();
+
+    await deal.save();
+
+    res.json(deal);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to accept transaction.",
+    });
+  }
+});
+
+/* ======================================================
+   CANCEL DEAL
+====================================================== */
+
+router.patch("/:id/cancel", protect, async (req, res) => {
+  try {
+    const userId = getUserId(req);
+
+    const deal = await Deal.findById(req.params.id);
+
+    if (!deal) {
+      return res.status(404).json({
+        message: "Transaction not found.",
+      });
+    }
+
+    if (!isDealMember(deal, userId)) {
+      return res.status(403).json({
+        message: "Not allowed.",
+      });
+    }
+
+    deal.status = "Cancelled";
+    deal.cancelledAt = new Date();
+
+    await deal.save();
+
+    res.json(deal);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to cancel transaction.",
+    });
+  }
+});
+
+/* ======================================================
+   BUYER CONFIRMS COMPLETION
+====================================================== */
+
+router.patch("/:id/confirm-buyer", protect, async (req, res) => {
+  try {
+    const userId = getUserId(req);
+
+    const deal = await Deal.findById(req.params.id);
+
+    if (!deal) {
+      return res.status(404).json({
+        message: "Transaction not found.",
+      });
+    }
+
+    if (getIdString(deal.buyer) !== userId.toString()) {
+      return res.status(403).json({
+        message: "Only the buyer can confirm completion.",
+      });
+    }
+
+    deal.buyerConfirmed = true;
+
+    if (deal.sellerConfirmed) {
+      deal.status = "Completed";
       deal.completedAt = new Date();
-      deal.buyerConfirmed = true;
     }
 
     await deal.save();
 
-    const updatedDeal = await Deal.findById(deal._id)
-      .populate("buyer", "name email role")
-      .populate("seller", "name email role");
-
-    res.json(updatedDeal);
+    res.json(deal);
   } catch (err) {
-    console.log("UPDATE DEAL ERROR:", err);
-    res.status(500).json({ message: "Failed to update transaction" });
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to confirm completion.",
+    });
   }
 });
+
+/* ======================================================
+   SELLER CONFIRMS COMPLETION
+====================================================== */
+
+router.patch("/:id/confirm-seller", protect, async (req, res) => {
+  try {
+    const userId = getUserId(req);
+
+    const deal = await Deal.findById(req.params.id);
+
+    if (!deal) {
+      return res.status(404).json({
+        message: "Transaction not found.",
+      });
+    }
+
+    if (getIdString(deal.seller) !== userId.toString()) {
+      return res.status(403).json({
+        message: "Only the seller can confirm completion.",
+      });
+    }
+
+    deal.sellerConfirmed = true;
+
+    if (deal.buyerConfirmed) {
+      deal.status = "Completed";
+      deal.completedAt = new Date();
+    }
+
+    await deal.save();
+
+    res.json(deal);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to confirm completion.",
+    });
+  }
+});
+
+/* ======================================================
+   GET MESSAGES
+====================================================== */
 
 router.get("/:id/messages", protect, async (req, res) => {
   try {
     const userId = getUserId(req);
 
-    if (!userId) {
-      return res.status(401).json({ message: "Not logged in" });
-    }
-
     const deal = await Deal.findById(req.params.id);
 
     if (!deal) {
-      return res.status(404).json({ message: "Transaction not found" });
+      return res.status(404).json({
+        message: "Transaction not found.",
+      });
     }
 
     if (!isDealMember(deal, userId)) {
-      return res.status(403).json({ message: "Not allowed" });
+      return res.status(403).json({
+        message: "Not allowed.",
+      });
     }
 
-    const messages = await Message.find({ dealId: deal._id })
+    const messages = await Message.find({
+      dealId: deal._id,
+    })
       .populate("senderId", "fullName email role")
       .sort({ createdAt: 1 });
 
     res.json(messages);
   } catch (err) {
-    console.log("FETCH MESSAGES ERROR:", err);
-    res.status(500).json({ message: "Failed to fetch messages" });
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to fetch messages.",
+    });
   }
 });
+
+/* ======================================================
+   SEND MESSAGE
+====================================================== */
 
 router.post("/:id/messages", protect, async (req, res) => {
   try {
     const userId = getUserId(req);
     const { text } = req.body;
 
-    if (!userId) {
-      return res.status(401).json({ message: "Not logged in" });
-    }
-
-    if (!text || !text.trim()) {
-      return res.status(400).json({ message: "Message cannot be empty" });
+    if (!text?.trim()) {
+      return res.status(400).json({
+        message: "Message cannot be empty.",
+      });
     }
 
     const deal = await Deal.findById(req.params.id);
 
     if (!deal) {
-      return res.status(404).json({ message: "Transaction not found" });
+      return res.status(404).json({
+        message: "Transaction not found.",
+      });
     }
 
     if (!isDealMember(deal, userId)) {
-      return res.status(403).json({ message: "Not allowed" });
+      return res.status(403).json({
+        message: "Not allowed.",
+      });
     }
 
     const message = await Message.create({
@@ -246,18 +369,26 @@ router.post("/:id/messages", protect, async (req, res) => {
       text: text.trim(),
     });
 
-    const populatedMessage = await Message.findById(message._id).populate("senderId", "fullName email role");
+    const populatedMessage = await Message.findById(message._id)
+      .populate("senderId", "fullName email role");
 
-    req.app.get("io").to(deal._id.toString()).emit("newMessage", populatedMessage);
+    req.app.get("io")
+      .to(deal._id.toString())
+      .emit("newMessage", populatedMessage);
 
     res.status(201).json(populatedMessage);
   } catch (err) {
-    console.log("SEND MESSAGE ERROR:", err);
-    res.status(500).json({ message: "Failed to send message" });
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to send message.",
+    });
   }
 });
 
-// Add this DELETE route
+/* ======================================================
+   DELETE DEAL
+====================================================== */
+
 router.delete("/:id", protect, async (req, res) => {
   try {
     const userId = getUserId(req);
@@ -265,31 +396,33 @@ router.delete("/:id", protect, async (req, res) => {
     const deal = await Deal.findById(req.params.id);
 
     if (!deal) {
-      return res.status(404).json({ message: "Transaction not found" });
+      return res.status(404).json({
+        message: "Transaction not found.",
+      });
     }
 
     if (!isDealMember(deal, userId)) {
-      return res.status(403).json({ message: "Not allowed" });
+      return res.status(403).json({
+        message: "Not allowed.",
+      });
     }
 
-    // Only allow deletion if deal is still pending
-    if (deal.status !== "pending") {
+    if (deal.status !== "Pending") {
       return res.status(400).json({
-        message: "Only pending transactions can be deleted"
+        message: "Only pending transactions can be deleted.",
       });
     }
 
     await Deal.findByIdAndDelete(req.params.id);
 
-    if (!deal.deletedBy.map(id => id.toString()).includes(userId.toString())) {
-      deal.deletedBy.push(userId);
-      await deal.save();
-    }
-
-    res.json({ message: "Transaction deleted" });
+    res.json({
+      message: "Transaction deleted.",
+    });
   } catch (err) {
-    console.log("DELETE DEAL ERROR:", err);
-    res.status(500).json({ message: "Failed to delete transaction" });
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to delete transaction.",
+    });
   }
 });
 

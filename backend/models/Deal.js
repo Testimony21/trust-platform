@@ -20,6 +20,12 @@ const dealSchema = new mongoose.Schema(
       trim: true,
     },
 
+    description: {
+      type: String,
+      trim: true,
+      maxlength: 1000
+    },
+
     amount: {
       type: Number,
       default: 0,
@@ -33,15 +39,15 @@ const dealSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [
-        "pending",
-        "accepted",
-        "payment_sent",
-        "delivered",
-        "completed",
-        "cancelled",
-        "disputed",
+        "Pending",
+        "Accepted",
+        "Active",
+        "Completed",
+        "Cancelled",
+        // "Declined",
+        "Disputed",
       ],
-      default: "pending",
+      default: "Pending",
     },
 
     buyerConfirmed: {
@@ -54,7 +60,21 @@ const dealSchema = new mongoose.Schema(
       default: false,
     },
 
+    buyerReviewed: {
+      type: Boolean,
+      default: false
+    },
+
+    sellerReviewed: {
+      type: Boolean,
+      default: false
+    },
+
+    acceptedAt: Date,
+
     completedAt: Date,
+
+    cancelledAt: Date,
 
     deletedBy: [
       {
