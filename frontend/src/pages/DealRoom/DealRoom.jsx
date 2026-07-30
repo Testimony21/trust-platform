@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Send, ShieldCheck } from "lucide-react";
-import { getDeal, getMessages, sendMessage, updateDealStatus } from "../../api/dealApi";
+import { ArrowLeft, Send, ShieldCheck, Star } from "lucide-react";
+import {
+  getDeal,
+  getMessages,
+  sendMessage,
+  acceptDeal,
+  cancelDeal,
+  confirmDealAsBuyer,
+  confirmDealAsSeller,
+  getReviewForDeal,
+  submitReview,
+} from "../../api/dealApi";
 import { useAuth } from "../../context/AuthContext";
 import { io } from "socket.io-client";
 import "./DealRoom.css";
@@ -21,7 +31,13 @@ export default function DealRoom() {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [existingReview, setExistingReview] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   const currentUserId = user?._id?.toString() || user?.id?.toString();
 
@@ -34,6 +50,11 @@ export default function DealRoom() {
       ]);
       setDeal(dealData);
       setMessages(messageData);
+
+      if (dealData.status === "Completed") {
+        const review = await getReviewForDeal(id);
+        setExistingReview(review);
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load deal room");
     } finally {
@@ -54,6 +75,7 @@ export default function DealRoom() {
       socket.emit("leaveDeal", id);
       socket.off("newMessage");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleSend = async (e) => {
@@ -71,12 +93,39 @@ export default function DealRoom() {
     }
   };
 
-  const handleStatusUpdate = async (status) => {
+  const runAction = async (actionFn) => {
     try {
-      const updatedDeal = await updateDealStatus(id, status);
+      setActionLoading(true);
+      setError("");
+      const updatedDeal = await actionFn(id);
       setDeal(updatedDeal);
+      if (updatedDeal.status === "Completed") {
+        const review = await getReviewForDeal(id);
+        setExistingReview(review);
+      }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update status");
+      setError(err.response?.data?.message || "Failed to update transaction");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (rating < 1) {
+      setError("Please select a star rating");
+      return;
+    }
+
+    try {
+      setSubmittingReview(true);
+      setError("");
+      const review = await submitReview(id, rating, reviewComment);
+      setExistingReview(review);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to submit review");
+    } finally {
+      setSubmittingReview(false);
     }
   };
 
@@ -107,7 +156,7 @@ export default function DealRoom() {
             <h1>{deal.title}</h1>
 
             <span className={`deal-room-status status-${deal.status}`}>
-              {deal.status.replace("_", " ")}
+              {deal.status}
             </span>
 
             <div className="summary-list">
@@ -132,32 +181,89 @@ export default function DealRoom() {
             </div>
 
             <div className="deal-actions">
-              {isSeller &&
-                deal.status !== "delivered" &&
-                deal.status !== "completed" && (
-                  <button onClick={() => handleStatusUpdate("delivered")}>
-                    Mark delivered
-                  </button>
-                )}
-
-              {isBuyer && deal.status !== "completed" && (
-                <button onClick={() => handleStatusUpdate("completed")}>
-                  Mark completed
+              {isSeller && deal.status === "Pending" && (
+                <button disabled={actionLoading} onClick={() => runAction(acceptDeal)}>
+                  Accept deal
                 </button>
               )}
 
-              <button
-                className="danger"
-                onClick={() => handleStatusUpdate("disputed")}
-              >
-                Report issue
-              </button>
+              {deal.status === "Active" && isBuyer && !deal.buyerConfirmed && (
+                <button disabled={actionLoading} onClick={() => runAction(confirmDealAsBuyer)}>
+                  Confirm completion
+                </button>
+              )}
+
+              {deal.status === "Active" && isSeller && !deal.sellerConfirmed && (
+                <button disabled={actionLoading} onClick={() => runAction(confirmDealAsSeller)}>
+                  Confirm completion
+                </button>
+              )}
+
+              {deal.status === "Active" && isBuyer && deal.buyerConfirmed && (
+                <p className="deal-note">Waiting for {deal.seller?.fullName || "the seller"} to confirm.</p>
+              )}
+
+              {deal.status === "Active" && isSeller && deal.sellerConfirmed && (
+                <p className="deal-note">Waiting for {deal.buyer?.fullName || "the buyer"} to confirm.</p>
+              )}
+
+              {(deal.status === "Pending" || deal.status === "Active") && (
+                <button className="danger" disabled={actionLoading} onClick={() => runAction(cancelDeal)}>
+                  Cancel deal
+                </button>
+              )}
             </div>
 
             <div className="deal-note">
               <ShieldCheck size={18} />
               Feedback will only be allowed after a completed deal.
             </div>
+
+            {deal.status === "Completed" && isBuyer && (
+              <div className="review-box">
+                {existingReview ? (
+                  <div className="review-submitted">
+                    <p>Your review:</p>
+                    <div className="review-stars">
+                      {"★".repeat(existingReview.rating)}
+                      {"☆".repeat(5 - existingReview.rating)}
+                    </div>
+                    {existingReview.comment && <p>{existingReview.comment}</p>}
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmitReview} className="review-form">
+                    <p>How did this deal go with {deal.seller?.fullName || "the seller"}?</p>
+                    <div className="star-input">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          type="button"
+                          key={star}
+                          aria-label={`${star} star${star > 1 ? "s" : ""}`}
+                          onClick={() => setRating(star)}
+                          className="star-button"
+                        >
+                          <Star
+                            size={22}
+                            fill={star <= rating ? "#f5a623" : "none"}
+                            color={star <= rating ? "#f5a623" : "#666"}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    <textarea
+                      placeholder="Share details about your experience (optional)"
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      maxLength={1000}
+                      rows={3}
+                    />
+                    <button type="submit" disabled={submittingReview}>
+                      {submittingReview ? "Submitting..." : "Submit review"}
+                    </button>
+                  </form>
+                )}
+              </div>
+            )}
           </aside>
 
           <section className="chat-panel">

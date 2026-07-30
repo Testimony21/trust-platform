@@ -15,6 +15,7 @@ import {
   LayoutDashboard,
   LogOut,
 } from "lucide-react";
+import NotificationBell from "../../components/NotificationBell/NotificationBell";
 import "./SellerDashboard.css";
 
 export default function SellerDashboard() {
@@ -174,6 +175,7 @@ export default function SellerDashboard() {
           </div>
 
           <div className="dash-user">
+            <NotificationBell />
             <div className="dash-avatar">{initials}</div>
             <div>
               <p className="dash-name">{user.fullName || "Seller"}</p>

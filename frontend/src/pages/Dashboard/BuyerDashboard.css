@@ -1,11 +1,14 @@
-@import "./SellerDashboard.css"; /* reuse all .dash, .dash-card, .dash-sidebar etc */
+@import "./SellerDashboard.css";
+/* reuse all .dash, .dash-card, .dash-sidebar etc */
 /* SIDEBAR ACTIVE & HOVER STATES ALIGNMENT */
 
 /* 1. Style the active "Overview" item to match the blue/periwinkle theme */
 .dash-nav-item.active {
   /* Using the same periwinkle/blue background and text as your main CTAs */
-  background: rgba(99, 102, 241, 0.12) !important; /* Soft transparent blue */
-  color: var(--primary-light, #6366f1) !important; /* Brighter blue text */
+  background: rgba(99, 102, 241, 0.12) !important;
+  /* Soft transparent blue */
+  color: var(--primary-light, #6366f1) !important;
+  /* Brighter blue text */
 }
 
 /* 2. Ensure the icon inside the active nav item matches */
@@ -35,10 +38,10 @@
   /* Using the new primary periwinkle brand color */
   background: var(--primary, #6366f1) !important;
   color: #ffffff !important;
-  
+
   /* Adding a subtle glow to match the premium dashboard look */
   box-shadow: 0 0 16px rgba(99, 102, 241, 0.25);
-  
+
   /* Ensure smooth centering for the initials */
   display: flex;
   align-items: center;
@@ -48,7 +51,8 @@
 
 .onboarding-checklist {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border); /* Using theme border variable */
+  border: 1px solid var(--border);
+  /* Using theme border variable */
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
@@ -63,13 +67,15 @@
 
 .checklist-header h2 {
   font-size: 1rem;
-  color: var(--text); /* Using theme text variable */
+  color: var(--text);
+  /* Using theme text variable */
   margin: 0;
 }
 
 .checklist-header span {
   font-size: 0.8rem;
-  color: var(--text-muted); /* Using theme muted text variable */
+  color: var(--text-muted);
+  /* Using theme muted text variable */
 }
 
 .checklist-progress {
@@ -145,9 +151,17 @@
   margin-top: 4px;
 }
 
-.trust-high { color: #22c55e; }
-.trust-medium { color: #f59e0b; }
-.trust-low { color: #f87171; }
+.trust-high {
+  color: #22c55e;
+}
+
+.trust-medium {
+  color: #f59e0b;
+}
+
+.trust-low {
+  color: #f87171;
+}
 
 .buyer-search-card {
   background: rgba(255, 255, 255, 0.03);
@@ -416,14 +430,15 @@
   grid-template-columns: 260px 1fr;
   min-height: 100vh;
   /* Dark, premium backdrop distinct from the sidebar */
-  background: 
+  background:
     radial-gradient(circle at 85% 40%, rgba(99, 102, 241, 0.08) 0%, rgba(143, 68, 255, 0.04) 40%, transparent 70%),
     #0b0f19 !important;
 }
 
 /* 2. Make the sidebar stand out on top of the background */
 .dash-sidebar {
-  background: rgba(10, 10, 18, 0.6) !important; /* Slightly darker/solid than the layout background */
+  background: rgba(10, 10, 18, 0.6) !important;
+  /* Slightly darker/solid than the layout background */
   backdrop-filter: blur(12px);
   border-right: 1px solid var(--border, rgba(255, 255, 255, 0.06));
 }
@@ -445,11 +460,28 @@
 }
 
 
+
+.view-profile-link {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: #818cf8;
+  font-size: 0.85rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.view-profile-link:hover {
+  color: #a5b4fc;
+  text-decoration: underline;
+}
+
+
 /* ==========================================================================
    BUYER DASHBOARD RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 
 @media (max-width: 768px) {
+
   /* Onboarding Checklist adjustments */
   .onboarding-checklist {
     padding: 16px;
@@ -477,7 +509,8 @@
   }
 
   .buyer-search-bar svg {
-    display: none; /* Hide search icon on mobile to save space */
+    display: none;
+    /* Hide search icon on mobile to save space */
   }
 
   .buyer-search-bar input {

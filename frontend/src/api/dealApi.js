@@ -23,13 +23,43 @@ export const getDeal = async (dealId) => {
   return res.data;
 };
 
-export const updateDealStatus = async (dealId, status) => {
+// Seller accepts a Pending deal -> Active
+export const acceptDeal = async (dealId) => {
   const res = await axios.patch(
-    `${API_URL}/api/deals/${dealId}/status`,
-    { status },
+    `${API_URL}/api/deals/${dealId}/accept`,
+    {},
     authHeader()
   );
+  return res.data;
+};
 
+// Either party cancels
+export const cancelDeal = async (dealId) => {
+  const res = await axios.patch(
+    `${API_URL}/api/deals/${dealId}/cancel`,
+    {},
+    authHeader()
+  );
+  return res.data;
+};
+
+// Buyer confirms completion - deal auto-completes once seller has confirmed too
+export const confirmDealAsBuyer = async (dealId) => {
+  const res = await axios.patch(
+    `${API_URL}/api/deals/${dealId}/confirm-buyer`,
+    {},
+    authHeader()
+  );
+  return res.data;
+};
+
+// Seller confirms completion - deal auto-completes once buyer has confirmed too
+export const confirmDealAsSeller = async (dealId) => {
+  const res = await axios.patch(
+    `${API_URL}/api/deals/${dealId}/confirm-seller`,
+    {},
+    authHeader()
+  );
   return res.data;
 };
 
@@ -52,6 +82,21 @@ export const sendMessage = async (dealId, text) => {
     { text },
     authHeader()
   );
+  return res.data;
+};
 
+// --- Reviews (mounted at /api/reviews on the backend) ---
+
+export const getReviewForDeal = async (dealId) => {
+  const res = await axios.get(`${API_URL}/api/reviews/deals/${dealId}/review`, authHeader());
+  return res.data;
+};
+
+export const submitReview = async (dealId, rating, comment) => {
+  const res = await axios.post(
+    `${API_URL}/api/reviews/deals/${dealId}/review`,
+    { rating, comment },
+    authHeader()
+  );
   return res.data;
 };

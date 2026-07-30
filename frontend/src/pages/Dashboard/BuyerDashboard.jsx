@@ -18,6 +18,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { createDeal } from "../../api/dealApi";
+import NotificationBell from "../../components/NotificationBell/NotificationBell";
 import "./BuyerDashboard.css";
 
 export default function BuyerDashboard() {
@@ -220,6 +221,7 @@ export default function BuyerDashboard() {
           </div>
 
           <div className="dash-user">
+            <NotificationBell />
             <div className="dash-avatar">{initials}</div>
             <div>
               <p className="dash-name">{user.fullName || "Buyer"}</p>
@@ -269,8 +271,8 @@ export default function BuyerDashboard() {
                 <span>{result.trustScore ?? 0}%</span>
                 <small>Trust Score</small>
                 <p className={`trust-label ${result.trustScore >= 70 ? "trust-high" :
-                    result.trustScore >= 40 ? "trust-medium" :
-                      "trust-low"
+                  result.trustScore >= 40 ? "trust-medium" :
+                    "trust-low"
                   }`}>
                   {result.trustScore >= 70 ? "Low Risk" :
                     result.trustScore >= 40 ? "Moderate Risk" :
@@ -280,6 +282,10 @@ export default function BuyerDashboard() {
                 </p>
               </div>
             </div>
+
+            <Link to={`/sellers/${result._id}`} className="view-profile-link">
+              View full profile & reviews →
+            </Link>
 
             <div className="buyer-result-details">
               <div><span>Email</span><strong>{result.email || "—"}</strong></div>

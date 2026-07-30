@@ -17,19 +17,22 @@ import VerificationStatus from "./pages/Dashboard/VerificationStatus/Verificatio
 import AdminDashboard from "./components/admin/AdminVerificationPanel";
 import AdminRoute from "./components/routing/AdminRoute";
 import AdminVerificationPanel from "./components/admin/AdminVerificationPanel";
+import SellerProfile from "./pages/SellerProfile/SellerProfile";
+import MyReviews from "./pages/MyReviews/MyReviews";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 
 function Layout() {
   const location = useLocation();
-  
+
   // FIXED: Changed to .startsWith() so the Navbar stays hidden on any sub-routes under /admin or /dashboard
   const hideNavbar = [
-    "/login", 
+    "/login",
     "/register"
-  ].includes(location.pathname) || 
-  location.pathname.startsWith("/dashboard") || 
-  location.pathname.startsWith("/deals") || 
-  location.pathname.startsWith("/admin");
+  ].includes(location.pathname) ||
+    location.pathname.startsWith("/dashboard") ||
+    location.pathname.startsWith("/deals") ||
+    location.pathname.startsWith("/admin");
 
   return (
     <>
@@ -47,6 +50,8 @@ function Layout() {
         <Route path="/dashboard" element={<DashboardRouter />} />
         <Route path="/deals" element={<Deals />} />
         <Route path="/deals/:id" element={<DealRoom />} />
+        <Route path="/sellers/:id" element={<SellerProfile />} />
+        <Route path="/dashboard/reviews" element={<MyReviews />} />
         <Route
           path="/dashboard/verification"
           element={
@@ -70,7 +75,9 @@ function Layout() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Layout />
+      <ErrorBoundary>
+        <Layout />
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }
