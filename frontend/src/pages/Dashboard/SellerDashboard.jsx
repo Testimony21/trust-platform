@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import logo from "../../assets/images/bg-logo.png";
+import logo from "../../assets/images/new-logo.png";
 import DashboardLoader from "../../components/DashboardLoader/DashboardLoader";
 import {
   ShieldCheck,

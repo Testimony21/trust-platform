@@ -9,10 +9,10 @@
 }
 
 .dash-logo img {
-  height: 85px;      /* adjust this until it fits nicely */
+  height: 175px;      /* adjust this until it fits nicely */
   width: auto;
   object-fit: contain;
-   transform: translateY(-8px); /* adjust this to vertically center the logo */
+  transform: translateY(-8px); /* adjust this to vertically center the logo */
 }
 
 

@@ -5,16 +5,20 @@ import { ChevronLeft, CheckCircle2, Clock, ShieldCheck, AlertTriangle, Upload } 
 import axios from "axios";
 import "./GetVerified.css";
 
+const ALLOWED_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "application/pdf"];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB - matches backend limit
+const MIN_FILE_SIZE = 1024; // 1KB - rejects empty/corrupted files
+
 export default function GetVerified() {
   const { token, user, loading: authLoading, refreshUser } = useAuth();
   const navigate = useNavigate();
 
-  // Initialize status accurately from the core User profile context tracking metrics
   const status = user?.verificationStatus || "Not Submitted";
 
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [fileError, setFileError] = useState("");
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -27,34 +31,91 @@ export default function GetVerified() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setIdFile(e.target.files[0]);
+  const validateFile = (file) => {
+    if (!file) return "Please choose a document to upload.";
+
+    if (file.size === 0) {
+      return "That file appears to be empty. Please choose a valid document.";
     }
+
+    if (file.size < MIN_FILE_SIZE) {
+      return "That file is too small to be a valid document. Please check the file and try again.";
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return "File is too large. Please upload a document under 10MB.";
+    }
+
+    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+      return "Unsupported file type. Please upload a JPG, PNG, WEBP, or PDF.";
+    }
+
+    return "";
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setIdFile(null);
+      return;
+    }
+
+    const validationError = validateFile(file);
+    if (validationError) {
+      setFileError(validationError);
+      setIdFile(null);
+      e.target.value = ""; // reset the input so the same bad file can be re-selected after a fix
+      return;
+    }
+
+    setFileError("");
+    setIdFile(file);
+  };
+
+  const validatePhoneNumber = (phone) => {
+    const digitsOnly = phone.replace(/[\s\-+]/g, "");
+    return /^\d{7,15}$/.test(digitsOnly);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!formData.fullName.trim() || !formData.phoneNumber.trim() || (!idFile && status !== "Rejected")) {
-      setError("Please fill in all fields and choose a document file.");
+    const trimmedName = formData.fullName.trim();
+    const trimmedPhone = formData.phoneNumber.trim();
+
+    if (!trimmedName || trimmedName.length < 2) {
+      setError("Please enter your full legal name.");
+      return;
+    }
+
+    if (!trimmedPhone || !validatePhoneNumber(trimmedPhone)) {
+      setError("Please enter a valid phone number.");
+      return;
+    }
+
+    // File is always required, including on resubmission after rejection -
+    // this matches what the backend enforces.
+    if (!idFile) {
+      setError("Please upload your identity document.");
+      return;
+    }
+
+    const validationError = validateFile(idFile);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     try {
       setSubmitting(true);
 
-      // Build a Multipart Form Data construct to securely transport file arrays
       const payload = new FormData();
-      payload.append("fullName", formData.fullName.trim());
+      payload.append("fullName", trimmedName);
       payload.append("idType", formData.idType);
-      payload.append("phoneNumber", formData.phoneNumber.trim());
-      if (idFile) {
-        payload.append("idFile", idFile);
-      }
+      payload.append("phoneNumber", trimmedPhone);
+      payload.append("idFile", idFile);
 
-      // Route pointing precisely to your verification route layout mapping
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/verification/submit`,
         payload,
@@ -66,7 +127,6 @@ export default function GetVerified() {
         }
       );
 
-      // 🎯 OPTIMIZED: Synchronize user context parameters immediately after network success
       if (refreshUser) {
         await refreshUser();
       }
@@ -81,10 +141,8 @@ export default function GetVerified() {
     }
   };
 
-  // Wait for auth initialization state values
   if (authLoading) return null;
 
-  // Gate — must be logged in
   if (!user) {
     return (
       <div className="verify-page">
@@ -104,7 +162,6 @@ export default function GetVerified() {
     <div className="verify-page">
       <div className="verify-container">
 
-        {/* LEFT COLUMN: GUIDES AND LIFECYCLE INDICATORS */}
         <div className="verify-info">
           <Link to="/dashboard" className="verify-back">
             <ChevronLeft size={16} /> Back to dashboard
@@ -133,7 +190,6 @@ export default function GetVerified() {
             </div>
           </div>
 
-          {/* STATUS CONTEXT DISPATCH CARD */}
           <div className="status-card">
             <span>Verification Status</span>
             <h3 className={`status-display ${
@@ -156,7 +212,6 @@ export default function GetVerified() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: ACTION AND DATA ENGINE INPUT CARDS */}
         <div className="verify-form-card">
           <h2>Verification Details</h2>
           <p className="form-sub">
@@ -200,7 +255,7 @@ export default function GetVerified() {
 
               {status === "Rejected" && (
                 <div className="resubmission-notice">
-                  <strong>Action Required:</strong> Please adjust the components flagged by the administrator notes on the left column interface before submitting again.
+                  <strong>Action Required:</strong> Please adjust the components flagged by the administrator notes on the left column interface, and upload a new document, before submitting again.
                 </div>
               )}
 
@@ -213,6 +268,7 @@ export default function GetVerified() {
                   value={formData.fullName}
                   onChange={handleInputChange}
                   required
+                  minLength={2}
                 />
               </div>
 
@@ -238,21 +294,22 @@ export default function GetVerified() {
               </div>
 
               <div className="form-group">
-                <label>Upload ID Document (Image or PDF) *</label>
+                <label>Upload ID Document (JPG, PNG, WEBP, or PDF - max 10MB) *</label>
                 <div className="file-upload-zone">
                   <input
                     type="file"
                     id="idFile"
-                    accept="image/*,application/pdf"
+                    accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf"
                     onChange={handleFileChange}
                     style={{ display: "none" }}
-                    required={status !== "Rejected"} 
+                    required
                   />
                   <label htmlFor="idFile" className="file-upload-label">
                     <Upload size={20} />
                     <span>{idFile ? idFile.name : "Choose File or Drag & Drop"}</span>
                   </label>
                 </div>
+                {fileError && <p className="file-error">{fileError}</p>}
               </div>
 
               <button type="submit" className="submit-verify-btn" disabled={submitting}>

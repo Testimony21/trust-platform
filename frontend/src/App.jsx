@@ -21,6 +21,19 @@ import SellerProfile from "./pages/SellerProfile/SellerProfile";
 import MyReviews from "./pages/MyReviews/MyReviews";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
+// Static / marketing pages
+import TrustScores from "./pages/TrustScores/TrustScores";
+import ReportsInfo from "./pages/ReportsInfo/ReportsInfo";
+import Protection from "./pages/Protection/Protection";
+import About from "./pages/About/About";
+import HowItWorksPage from "./pages/HowItWorksPage/HowItWorksPage";
+import Contact from "./pages/Contact/Contact";
+import Careers from "./pages/Careers/Careers";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import Terms from "./pages/Legal/Terms";
+import Cookies from "./pages/Legal/Cookies";
+import Guidelines from "./pages/Legal/Guidelines";
+
 
 function Layout() {
   const location = useLocation();
@@ -45,6 +58,19 @@ function Layout() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/get-verified" element={<GetVerified />} />
+
+        {/* Static / marketing pages */}
+        <Route path="/trust-scores" element={<TrustScores />} />
+        <Route path="/reports" element={<ReportsInfo />} />
+        <Route path="/protection" element={<Protection />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/careers" element={<Careers />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/cookies" element={<Cookies />} />
+        <Route path="/guidelines" element={<Guidelines />} />
 
         {/* Private User/Seller Pages */}
         <Route path="/dashboard" element={<DashboardRouter />} />

@@ -87,28 +87,28 @@ export default function Footer() {
           <div>
             <h4>Platform</h4>
 
-            <a href="/">Verify Seller</a>
-            <a href="/">Trust Scores</a>
-            <a href="/">Reports</a>
-            <a href="/">Protection</a>
+            <Link to="/verify-seller">Verify Seller</Link>
+            <Link to="/trust-scores">Trust Scores</Link>
+            <Link to="/reports">Reports</Link>
+            <Link to="/protection">Protection</Link>
           </div>
 
           <div>
             <h4>Company</h4>
 
-            <a href="/">About</a>
-            <a href="/">How It Works</a>
-            <a href="/">Contact</a>
-            <a href="/">Careers</a>
+            <Link to="/about">About</Link>
+            <Link to="/how-it-works">How It Works</Link>
+            <Link to="/contact">Contact</Link>
+            <Link to="/careers">Careers</Link>
           </div>
 
           <div>
             <h4>Legal</h4>
 
-            <a href="/">Privacy Policy</a>
-            <a href="/">Terms</a>
-            <a href="/">Cookies</a>
-            <a href="/">Guidelines</a>
+            <Link to="/privacy-policy">Privacy Policy</Link>
+            <Link to="/terms">Terms</Link>
+            <Link to="/cookies">Cookies</Link>
+            <Link to="/guidelines">Guidelines</Link>
           </div>
 
         </div>

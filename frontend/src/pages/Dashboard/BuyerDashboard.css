@@ -146,23 +146,6 @@
   margin: 0;
 }
 
-.trust-label {
-  font-size: 0.75rem;
-  margin-top: 4px;
-}
-
-.trust-high {
-  color: #22c55e;
-}
-
-.trust-medium {
-  color: #f59e0b;
-}
-
-.trust-low {
-  color: #f87171;
-}
-
 .buyer-search-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
@@ -296,20 +279,75 @@
   border-radius: 999px;
 }
 
+/* Trust score ring — color and fill communicate risk on their own,
+   so we don't need a separate "Higher Risk" text tag next to it. */
 .buyer-result-score {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
-.buyer-result-score span {
-  display: block;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--primary-light);
+.trust-ring {
+  position: relative;
+  width: 84px;
+  height: 84px;
 }
 
-.buyer-result-score small {
-  font-size: 0.75rem;
+.trust-ring svg {
+  transform: rotate(-90deg);
+}
+
+.trust-ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 8;
+}
+
+.trust-ring-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease, stroke 0.3s ease;
+}
+
+.trust-ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.trust-ring-caption {
+  font-size: 0.7rem;
   color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Context note replacing the old alarmist "Higher Risk" label.
+   Only rendered when there's something useful to say. */
+.trust-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #e6d8b8;
+}
+
+.trust-note svg {
+  color: #f2b94a;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .buyer-result-details {
@@ -537,7 +575,7 @@
   }
 
   .buyer-result-score {
-    text-align: left;
+    align-items: flex-start;
   }
 
   /* Grid details columns stack beautifully on mobile */

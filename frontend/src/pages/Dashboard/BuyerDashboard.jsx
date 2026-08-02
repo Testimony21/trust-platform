@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import DashboardLoader from "../../components/DashboardLoader/DashboardLoader";
-import logo from "../../assets/images/bg-logo.png";
+import logo from "../../assets/images/new-logo.png";
 import {
   Search,
   CheckCircle2,
@@ -15,11 +15,76 @@ import {
   History,
   Settings,
   LogOut,
-  ArrowRight
+  ArrowRight,
+  Info
 } from "lucide-react";
 import { createDeal } from "../../api/dealApi";
 import NotificationBell from "../../components/NotificationBell/NotificationBell";
 import "./BuyerDashboard.css";
+
+// Trust score -> color + supporting copy.
+// A brand-new seller with no history isn't the same thing as a seller
+// with a proven bad track record, so they get a distinct neutral state
+// instead of being lumped in with "low trust" red.
+const RING_RADIUS = 38;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+function getTrustMeta(result) {
+  const score = result.trustScore ?? 0;
+  const reports = result.reports ?? 0;
+  // NOTE: assumes the seller object exposes a completed-deal count under
+  // `successfulDeals`. Rename this to match whatever field your
+  // /api/buyer/verify response actually returns.
+  const successfulDeals = result.successfulDeals ?? 0;
+  const isNew = score === 0 && !result.isVerified && reports === 0;
+
+  const dealWord = successfulDeals === 1 ? "deal" : "deals";
+
+  if (isNew) {
+    return {
+      color: "#818cf8",
+      note: "No completed deals yet. Trust score rises with each successful, reviewed transaction on Trust-Platform.",
+    };
+  }
+  if (score >= 70) {
+    return { color: "#22c55e", note: null };
+  }
+  if (score >= 40) {
+    return {
+      color: "#f59e0b",
+      note: `This seller has completed ${successfulDeals} ${dealWord} so far. Score rises with each successful deal and positive review.`,
+    };
+  }
+  return {
+    color: "#f87171",
+    note: `This seller has completed ${successfulDeals} ${dealWord} so far. Score rises with each successful deal and positive review.`,
+  };
+}
+
+function TrustRing({ score, color }) {
+  const clamped = Math.max(0, Math.min(100, score));
+  const dashOffset = RING_CIRCUMFERENCE - (clamped / 100) * RING_CIRCUMFERENCE;
+
+  return (
+    <div className="trust-ring">
+      <svg width="84" height="84" viewBox="0 0 84 84">
+        <circle className="trust-ring-track" cx="42" cy="42" r={RING_RADIUS} />
+        <circle
+          className="trust-ring-fill"
+          cx="42"
+          cy="42"
+          r={RING_RADIUS}
+          stroke={color}
+          strokeDasharray={RING_CIRCUMFERENCE}
+          strokeDashoffset={dashOffset}
+        />
+      </svg>
+      <div className="trust-ring-label" style={{ color }}>
+        {clamped}%
+      </div>
+    </div>
+  );
+}
 
 export default function BuyerDashboard() {
   const { user, token, logout, loading: authLoading } = useAuth();
@@ -171,6 +236,8 @@ export default function BuyerDashboard() {
   const allDone = checklistItems.every((item) => item.done);
   const doneCount = checklistItems.filter((i) => i.done).length;
 
+  const trustMeta = result ? getTrustMeta(result) : null;
+
   return (
     <div className="dash">
 
@@ -267,19 +334,10 @@ export default function BuyerDashboard() {
                   {result.isVerified ? "Verified" : "Not Verified"}
                 </span>
               </div>
+
               <div className="buyer-result-score">
-                <span>{result.trustScore ?? 0}%</span>
-                <small>Trust Score</small>
-                <p className={`trust-label ${result.trustScore >= 70 ? "trust-high" :
-                  result.trustScore >= 40 ? "trust-medium" :
-                    "trust-low"
-                  }`}>
-                  {result.trustScore >= 70 ? "Low Risk" :
-                    result.trustScore >= 40 ? "Moderate Risk" :
-                      result.trustScore === 0 && !result.isVerified
-                        ? "New — no reviews yet"
-                        : "Higher Risk"}
-                </p>
+                <TrustRing score={result.trustScore ?? 0} color={trustMeta.color} />
+                <span className="trust-ring-caption">Trust Score</span>
               </div>
             </div>
 
@@ -292,6 +350,13 @@ export default function BuyerDashboard() {
               <div><span>Phone</span><strong>{result.phone || "—"}</strong></div>
               <div><span>Reports</span><strong>{result.reports ?? 0}</strong></div>
             </div>
+
+            {trustMeta.note && (
+              <div className="trust-note">
+                <Info size={14} />
+                <span>{trustMeta.note}</span>
+              </div>
+            )}
 
             <div className="buyer-result-actions">
               <button
