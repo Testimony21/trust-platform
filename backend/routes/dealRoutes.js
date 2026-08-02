@@ -1,6 +1,7 @@
 const express = require("express");
 const Deal = require("../models/Deal");
 const Message = require("../models/Message");
+const SellerProfile = require("../models/SellerProfile");
 const protect = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -20,6 +21,37 @@ const isDealMember = (deal, userId) => {
     getIdString(deal.buyer) === userId.toString() ||
     getIdString(deal.seller) === userId.toString()
   );
+};
+
+/* ======================================================
+   SELLER STATS — called whenever a deal is fully confirmed
+   by both sides and flips to "Completed".
+   This is the piece that was missing: nothing previously
+   wrote back to SellerProfile when a deal completed, so
+   totalDeals/successfulDeals stayed at their schema
+   defaults (0) forever.
+====================================================== */
+
+const applyCompletedDealToSellerStats = async (deal) => {
+  const sellerProfile = await SellerProfile.findOne({ userId: deal.seller });
+
+  // Deal completed for a user with no SellerProfile doc (e.g. profile
+  // not yet created) — nothing to update, but don't block the request.
+  if (!sellerProfile) return;
+
+  sellerProfile.totalDeals += 1;
+  sellerProfile.successfulDeals += 1;
+
+  // Placeholder scoring: reward completion rate. If you already have a
+  // trust-score formula elsewhere (e.g. factoring in reviews, reports,
+  // identity verification), swap this line for that instead — this
+  // route had no hook into SellerProfile at all before, so there was
+  // nothing here to preserve.
+  sellerProfile.trustScore = Math.round(
+    (sellerProfile.successfulDeals / sellerProfile.totalDeals) * 100
+  );
+
+  await sellerProfile.save();
 };
 
 /* ======================================================
@@ -241,12 +273,18 @@ router.patch("/:id/confirm-buyer", protect, async (req, res) => {
 
     deal.buyerConfirmed = true;
 
+    let justCompleted = false;
     if (deal.sellerConfirmed) {
       deal.status = "Completed";
       deal.completedAt = new Date();
+      justCompleted = true;
     }
 
     await deal.save();
+
+    if (justCompleted) {
+      await applyCompletedDealToSellerStats(deal);
+    }
 
     res.json(deal);
   } catch (err) {
@@ -281,12 +319,18 @@ router.patch("/:id/confirm-seller", protect, async (req, res) => {
 
     deal.sellerConfirmed = true;
 
+    let justCompleted = false;
     if (deal.buyerConfirmed) {
       deal.status = "Completed";
       deal.completedAt = new Date();
+      justCompleted = true;
     }
 
     await deal.save();
+
+    if (justCompleted) {
+      await applyCompletedDealToSellerStats(deal);
+    }
 
     res.json(deal);
   } catch (err) {
